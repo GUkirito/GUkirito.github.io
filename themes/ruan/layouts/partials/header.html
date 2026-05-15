@@ -1,8 +1,9 @@
-﻿<header class="site-header">
-  <h1 class="site-title"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+<header class="site-header">
+  <h1 class="site-title"><a href="{{ "" | relURL }}">{{ .Site.Title }}</a></h1>
   <p class="site-tagline">{{ .Site.Params.description }}</p>
   <nav class="site-nav">
-    <a href="{{ .Site.BaseURL }}">首页</a>
+    <a href="{{ "" | relURL }}">首页</a>
+    <a href="{{ "/admin/" | relURL }}">写文章</a>
     <a href="#">归档</a>
     <a href="#">关于</a>
   </nav>
