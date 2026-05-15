@@ -1,0 +1,12 @@
+﻿{{ define "main" }}
+<a href="{{ .Site.BaseURL }}" class="back-link">&larr; 返回首页</a>
+<article>
+  <header class="article-header">
+    <h1 class="article-title">{{ .Title }}</h1>
+    <p class="article-meta">{{ .Date.Format "2006年01月02日" }}</p>
+  </header>
+  <div class="article-content">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}

@@ -1,0 +1,17 @@
+﻿baseURL = 'https://GUkirito.github.io/'
+languageCode = 'zh-CN'
+title = 'AI 学习笔记'
+theme = 'ruan'
+
+[params]
+  description = '每天学一点 AI，记录思考与成长'
+  author = 'gikirito'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[permalinks]
+  posts = '/:filename/'
+
