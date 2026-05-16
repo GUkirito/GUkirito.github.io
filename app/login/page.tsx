@@ -10,6 +10,7 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
+  const rejectedUser = searchParams.get("user");
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -23,9 +24,20 @@ function LoginContent() {
         <h1 className="text-2xl font-bold mb-2">AI 学习笔记</h1>
         <p className="text-gray-500 mb-6">后台管理</p>
 
-        {error && (
+        {error === "unauthorized" && rejectedUser && (
           <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg p-3 mb-4 text-sm">
-            登录失败：只有授权用户才能访问。
+            <p className="font-medium mb-1">登录被拒绝</p>
+            <p>
+              GitHub 账号 <code className="bg-red-100 px-1 rounded">{rejectedUser}</code> 不在白名单中，
+              <br />
+              仅允许 <code className="bg-red-100 px-1 rounded">gukirito</code> 登录。
+            </p>
+          </div>
+        )}
+
+        {error && error !== "unauthorized" && (
+          <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg p-3 mb-4 text-sm">
+            登录失败：{error === "no_login" ? "无法获取 GitHub 账号信息" : error}
           </div>
         )}
 
