@@ -1,9 +1,17 @@
-﻿{{ define "main" }}
+{{ define "main" }}
 <a href="{{ "" | relURL }}" class="back-link">&larr; 返回首页</a>
 <article>
   <header class="article-header">
     <h1 class="article-title">{{ .Title }}</h1>
-    <p class="article-meta">{{ .Date.Format "2006年01月02日" }}</p>
+    <p class="article-meta">
+      <span>{{ .Date.Format "2006年01月02日" }}</span>
+      {{ range .Params.categories }}
+      <a href="{{ "/categories/" | relURL }}{{ . | urlize }}" class="category">{{ . }}</a>
+      {{ end }}
+      {{ range .Params.tags }}
+      <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag">{{ . }}</a>
+      {{ end }}
+    </p>
   </header>
   <div class="article-content">
     {{ .Content }}

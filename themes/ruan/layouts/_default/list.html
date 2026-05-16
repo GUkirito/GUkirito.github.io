@@ -1,4 +1,4 @@
-﻿{{ define "main" }}
+{{ define "main" }}
 <ul class="post-list">
   {{ range .Pages }}
   <li class="post-item">
@@ -8,6 +8,16 @@
     </h2>
     {{ with .Description }}
     <p class="post-excerpt">{{ . }}</p>
+    {{ end }}
+    {{ if or .Params.tags .Params.categories }}
+    <div class="post-meta-extra">
+      {{ range .Params.categories }}
+      <a href="{{ "/categories/" | relURL }}{{ . | urlize }}" class="category">{{ . }}</a>
+      {{ end }}
+      {{ range .Params.tags }}
+      <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag">{{ . }}</a>
+      {{ end }}
+    </div>
     {{ end }}
   </li>
   {{ end }}

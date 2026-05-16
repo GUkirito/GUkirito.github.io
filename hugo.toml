@@ -1,5 +1,5 @@
 baseURL = 'https://GUkirito.github.io/'
-languageCode = 'zh-CN'
+locale = 'zh-CN'
 title = 'AI 学习笔记'
 theme = 'ruan'
 
@@ -13,4 +13,4 @@ theme = 'ruan'
       unsafe = true
 
 [permalinks]
-  posts = '/:filename/'
+  posts = '/:contentbasename/'
