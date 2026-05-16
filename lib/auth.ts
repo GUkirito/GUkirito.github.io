@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
     signIn({ profile }) {
       const login = (profile as { login?: string } | undefined)?.login;
       if (!login) return false;
-      return login === ALLOWED_USER;
+      return login.toLowerCase() === ALLOWED_USER.toLowerCase();
     },
   },
   pages: {
