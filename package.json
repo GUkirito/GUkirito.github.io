@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "vercel-build": "bash scripts/install-hugo.sh && hugo --minify --logLevel info && next build"
+    "vercel-build": "bash scripts/vercel-build.sh"
   },
   "dependencies": {
     "@uiw/react-md-editor": "^4.0.4",
