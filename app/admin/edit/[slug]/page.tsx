@@ -86,7 +86,7 @@ export default function EditPostPage() {
 
   if (!session) {
     return (
-      <div className="flex items-center justify-center h-64 text-gray-400">
+      <div className="flex items-center justify-center h-64 text-ink-muted">
         请先登录
       </div>
     );
@@ -94,7 +94,7 @@ export default function EditPostPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-gray-400">
+      <div className="flex items-center justify-center h-64 text-ink-muted">
         加载中...
       </div>
     );
@@ -102,21 +102,23 @@ export default function EditPostPage() {
 
   return (
     <div className="max-w-4xl">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">编辑文章</h2>
+      <h2 className="text-xl font-semibold text-ink-heading tracking-tight mb-6">
+        编辑文章
+      </h2>
 
       {message && (
         <div
           className={`border rounded-lg p-3 mb-4 text-sm ${
             message.type === "success"
-              ? "bg-green-50 text-green-700 border-green-200"
-              : "bg-red-50 text-red-700 border-red-200"
+              ? "bg-emerald-400/10 text-emerald-400 border-emerald-400/20"
+              : "bg-red-400/10 text-red-400 border-red-400/20"
           }`}
         >
           {message.text}
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+      <div className="bg-surface-card rounded-xl border border-surface-border p-6">
         <PostEditor
           initialTitle={title}
           initialDescription={description}

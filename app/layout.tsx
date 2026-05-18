@@ -12,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <body className="bg-gray-100 text-gray-900 min-h-screen">
+      <body className="min-h-screen antialiased">
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

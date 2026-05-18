@@ -42,7 +42,7 @@ export default function AdminDashboard() {
 
   if (status === "loading") {
     return (
-      <div className="flex items-center justify-center h-64 text-gray-400">
+      <div className="flex items-center justify-center h-64 text-ink-muted">
         加载中...
       </div>
     );
@@ -53,19 +53,21 @@ export default function AdminDashboard() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-gray-900">文章管理</h2>
-        <span className="text-sm text-gray-500">
+        <h2 className="text-xl font-semibold text-ink-heading tracking-tight">
+          文章管理
+        </h2>
+        <span className="text-sm text-ink-muted">
           共 {posts.length} 篇
         </span>
       </div>
 
       {error && (
-        <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg p-3 mb-4 text-sm">
+        <div className="bg-red-400/10 text-red-400 border border-red-400/20 rounded-lg p-3 mb-4 text-sm">
           {error}
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      <div className="bg-surface-card rounded-xl border border-surface-border">
         <PostList posts={posts} loading={loading} onDelete={handleDelete} />
       </div>
     </div>

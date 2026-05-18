@@ -11,14 +11,14 @@ interface PostListProps {
 
 export default function PostList({ posts, loading, onDelete }: PostListProps) {
   if (loading) {
-    return <div className="text-gray-400 py-8 text-center">加载中...</div>;
+    return <div className="text-ink-muted py-8 text-center">加载中...</div>;
   }
 
   if (posts.length === 0) {
     return (
-      <div className="text-gray-400 py-8 text-center">
+      <div className="text-ink-muted py-8 text-center">
         还没有文章，
-        <Link href="/admin/new" className="text-blue-600 hover:underline">
+        <Link href="/admin/new" className="text-accent hover:underline font-medium">
           写一篇
         </Link>
       </div>
@@ -29,7 +29,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-gray-200 text-left text-gray-500">
+          <tr className="border-b border-surface-border text-left text-ink-muted">
             <th className="pb-3 font-medium">标题</th>
             <th className="pb-3 font-medium w-28">日期</th>
             <th className="pb-3 font-medium w-32 text-right">操作</th>
@@ -37,22 +37,22 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
         </thead>
         <tbody>
           {posts.map((post) => (
-            <tr key={post.slug} className="border-b border-gray-100">
+            <tr key={post.slug} className="border-b border-surface-light">
               <td className="py-3 pr-4">
-                <span className="text-gray-900">{post.title}</span>
+                <span className="text-ink-body">{post.title}</span>
                 {post.description && (
-                  <span className="text-gray-400 text-xs ml-2 truncate max-w-xs inline-block align-middle">
+                  <span className="text-ink-faint text-xs ml-2 truncate max-w-xs inline-block align-middle">
                     — {post.description}
                   </span>
                 )}
               </td>
-              <td className="py-3 text-gray-500 whitespace-nowrap">
+              <td className="py-3 text-ink-muted whitespace-nowrap">
                 {post.date || "-"}
               </td>
               <td className="py-3 text-right whitespace-nowrap">
                 <Link
                   href={`/admin/edit/${post.slug}`}
-                  className="text-blue-600 hover:text-blue-800 mr-3 transition"
+                  className="text-accent hover:text-accent-hover mr-3 transition-colors duration-150 font-medium"
                 >
                   编辑
                 </Link>
@@ -62,7 +62,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
                       onDelete(post.slug);
                     }
                   }}
-                  className="text-red-500 hover:text-red-700 transition"
+                  className="text-red-400 hover:text-red-300 transition-colors duration-150"
                 >
                   删除
                 </button>

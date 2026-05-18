@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg: oklch(17% 0.005 210);
+    --color-surface: oklch(22% 0.006 210);
+    --color-text-heading: oklch(92% 0.002 210);
+    --color-text: oklch(82% 0.003 210);
+    --color-text-muted: oklch(65% 0.005 210);
+    --color-border: oklch(28% 0.005 210);
+    --color-border-light: oklch(23% 0.005 210);
+    --color-accent: oklch(65% 0.12 210);
+    --color-accent-hover: oklch(72% 0.12 210);
+    --color-danger: oklch(60% 0.18 20);
+    --color-danger-bg: oklch(25% 0.04 20);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --color-bg: oklch(97% 0.003 210);
+      --color-surface: oklch(99% 0.001 210);
+      --color-text-heading: oklch(20% 0.005 210);
+      --color-text: oklch(30% 0.005 210);
+      --color-text-muted: oklch(48% 0.005 210);
+      --color-border: oklch(88% 0.004 210);
+      --color-border-light: oklch(92% 0.003 210);
+      --color-accent: oklch(55% 0.12 210);
+      --color-accent-hover: oklch(50% 0.12 210);
+      --color-danger: oklch(50% 0.18 25);
+      --color-danger-bg: oklch(95% 0.02 20);
+    }
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+}

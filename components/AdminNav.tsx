@@ -8,16 +8,16 @@ export default function AdminNav() {
   const pathname = usePathname();
 
   const linkClass = (href: string) =>
-    `block px-3 py-2 rounded-lg text-sm font-medium transition ${
+    `block px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
       pathname === href
-        ? "bg-blue-50 text-blue-700"
-        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+        ? "bg-accent-muted text-accent"
+        : "text-ink-muted hover:bg-surface-light hover:text-ink-body"
     }`;
 
   return (
-    <aside className="w-56 bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-4 border-b border-gray-100">
-        <Link href="/admin" className="text-lg font-bold text-gray-900">
+    <aside className="w-56 bg-surface-card border-r border-surface-border flex flex-col shrink-0">
+      <div className="px-4 py-4 border-b border-surface-light">
+        <Link href="/admin" className="text-base font-semibold text-ink-heading tracking-tight">
           Admin
         </Link>
       </div>
@@ -31,11 +31,11 @@ export default function AdminNav() {
         </Link>
       </nav>
 
-      <div className="p-3 border-t border-gray-100">
+      <div className="p-3 border-t border-surface-light">
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-500
-                     hover:bg-gray-100 hover:text-gray-700 transition"
+          className="w-full text-left px-3 py-2 rounded-md text-sm text-ink-faint
+                     hover:bg-surface-light hover:text-ink-muted transition-colors duration-150"
         >
           退出登录
         </button>
