@@ -13,6 +13,9 @@ export default function EditPostPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
+  const [date, setDate] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{
@@ -31,6 +34,9 @@ export default function EditPostPage() {
         setTitle(data.title || "");
         setDescription(data.description || "");
         setContent(data.content || "");
+        setDate(data.date || "");
+        setCategories(data.categories || []);
+        setTags(data.tags || []);
       })
       .catch(() => setMessage({ type: "error", text: "加载文章失败" }))
       .finally(() => setLoading(false));
@@ -40,6 +46,9 @@ export default function EditPostPage() {
     title: string;
     description: string;
     content: string;
+    date: string;
+    categories: string[];
+    tags: string[];
   }) {
     setSaving(true);
     setMessage(null);
@@ -123,6 +132,9 @@ export default function EditPostPage() {
           initialTitle={title}
           initialDescription={description}
           initialContent={content}
+          initialDate={date}
+          initialCategories={categories}
+          initialTags={tags}
           onSubmit={handleSubmit}
           onDelete={handleDelete}
           saving={saving}

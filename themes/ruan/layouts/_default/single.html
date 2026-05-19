@@ -1,20 +1,62 @@
 {{ define "main" }}
-<a href="{{ "" | relURL }}" class="back-link">&larr; 返回首页</a>
+{{ $charCount := countrunes .Content }}
+{{ $readMin := div $charCount 450 }}
+{{ if lt $readMin 1 }}{{ $readMin = 1 }}{{ end }}
+
+<a href="{{ "" | relURL }}" class="back-link">&larr; 首页</a>
+
 <article>
   <header class="article-header">
     <h1 class="article-title">{{ .Title }}</h1>
-    <p class="article-meta">
-      <span>{{ .Date.Format "2006年01月02日" }}</span>
+    <div class="article-meta">
+      <span>{{ .Date.Format "2006-01-02" }}</span>
+      <span>&middot; {{ $readMin }} min read</span>
       {{ range .Params.categories }}
-      <a href="{{ "/categories/" | relURL }}{{ . | urlize }}" class="category">{{ . }}</a>
+      <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
       {{ end }}
-      {{ range .Params.tags }}
-      <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag">{{ . }}</a>
-      {{ end }}
-    </p>
+    </div>
   </header>
+
+  {{/* ---------- TOC ---------- */}}
+  {{ if and .TableOfContents (gt (len (findRE "<li>" .TableOfContents)) 0) }}
+  <details class="toc" open>
+    <summary class="toc-title">目录</summary>
+    <div class="toc-content">
+      {{ .TableOfContents }}
+    </div>
+  </details>
+  {{ end }}
+
   <div class="article-content">
     {{ .Content }}
   </div>
+
+  {{/* ---------- Tags ---------- */}}
+  {{ if .Params.tags }}
+  <div class="article-footer-meta">
+    <span class="footer-meta-label">标签</span>
+    <div class="footer-meta-pills">
+      {{ range .Params.tags }}
+      <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="pill pill-tag">{{ . }}</a>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
 </article>
+
+{{/* ---------- Prev / Next ---------- */}}
+<nav class="prev-next">
+  {{ with .PrevInSection }}
+  <a href="{{ .RelPermalink }}" class="prev-next-link prev-link">
+    <span class="prev-next-label">上一篇</span>
+    <span class="prev-next-title">{{ .Title }}</span>
+  </a>
+  {{ end }}
+  {{ with .NextInSection }}
+  <a href="{{ .RelPermalink }}" class="prev-next-link next-link">
+    <span class="prev-next-label">下一篇</span>
+    <span class="prev-next-title">{{ .Title }}</span>
+  </a>
+  {{ end }}
+</nav>
 {{ end }}

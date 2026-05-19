@@ -1,25 +1,97 @@
 {{ define "main" }}
-<ul class="post-list">
-  {{ range .Site.RegularPages }}
-  <li class="post-item">
-    <span class="post-date">{{ .Date.Format "2006年01月02日" }}</span>
-    <h2 class="post-title">
-      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-    </h2>
-    {{ with .Description }}
-    <p class="post-excerpt">{{ . }}</p>
+{{ $posts := .Site.RegularPages }}
+{{ $postCount := len $posts }}
+{{ $lastUpdated := "" }}
+{{ if gt $postCount 0 }}
+  {{ $latest := index $posts 0 }}
+  {{ $lastUpdated = $latest.Date.Format "2006-01-02" }}
+{{ end }}
+
+{{/* ---------- Intro block ---------- */}}
+<section class="intro-block">
+  <div class="intro-body">
+    <p class="intro-greeting">AI 学习笔记</p>
+    <p class="intro-desc">
+      一位菜鸟的公开学习日志。记录 AI 技术的学习与思考，每天进步一点点。
+    </p>
+  </div>
+  <div class="intro-meta">
+    <span><strong>{{ $postCount }}</strong> 篇文章</span>
+    {{ if $lastUpdated }}
+    <span>最近更新 <strong>{{ $lastUpdated }}</strong></span>
     {{ end }}
-    {{ if or .Params.tags .Params.categories }}
-    <div class="post-meta-extra">
-      {{ range .Params.categories }}
-      <a href="{{ "/categories/" | relURL }}{{ . | urlize }}" class="category">{{ . }}</a>
-      {{ end }}
-      {{ range .Params.tags }}
-      <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag">{{ . }}</a>
+  </div>
+</section>
+
+{{/* ---------- Content index ---------- */}}
+{{ $categories := .Site.Taxonomies.categories }}
+{{ $tags := .Site.Taxonomies.tags }}
+{{ if or $categories $tags }}
+<section class="content-index">
+  {{ if $categories }}
+  <div class="index-group">
+    <span class="index-label">分类</span>
+    <div class="index-pills">
+      {{ range $name, $_ := $categories }}
+      <a href="{{ "categories/" | relURL }}{{ $name | urlize }}" class="pill pill-category">{{ $name }}</a>
       {{ end }}
     </div>
-    {{ end }}
-  </li>
+  </div>
   {{ end }}
-</ul>
+  {{ if $tags }}
+  <div class="index-group">
+    <span class="index-label">标签</span>
+    <div class="index-pills">
+      {{ range $name, $_ := $tags }}
+      <a href="{{ "tags/" | relURL }}{{ $name | urlize }}" class="pill pill-tag">{{ $name }}</a>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+</section>
+{{ end }}
+
+{{/* ---------- Post list ---------- */}}
+{{ if gt $postCount 0 }}
+<section class="post-section">
+  <h2 class="section-heading">全部文章</h2>
+  <ul class="post-list">
+    {{ range $posts }}
+    <li class="post-item">
+      <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
+      <h3 class="post-title">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </h3>
+      {{ with .Description }}
+      <p class="post-excerpt">{{ . }}</p>
+      {{ end }}
+      <div class="post-meta-row">
+        {{ $charCount := countrunes .Content }}
+        {{ $readMin := div $charCount 450 }}
+        {{ if lt $readMin 1 }}{{ $readMin = 1 }}{{ end }}
+        <span class="post-reading-time">{{ $readMin }} min read</span>
+        {{ if .Params.categories }}
+        <span class="post-meta-sep">&middot;</span>
+        {{ range .Params.categories }}
+        <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
+        {{ end }}
+        {{ end }}
+        {{ if .Params.tags }}
+        {{ range .Params.tags }}
+        <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-tag">{{ . }}</a>
+        {{ end }}
+        {{ end }}
+      </div>
+    </li>
+    {{ end }}
+  </ul>
+</section>
+{{ else }}
+<section class="post-section">
+  <div class="empty-state">
+    <p>还没有文章。</p>
+    <a href="/login" class="empty-link">开始写作</a>
+  </div>
+</section>
+{{ end }}
 {{ end }}

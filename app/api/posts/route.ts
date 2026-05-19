@@ -26,6 +26,8 @@ export async function GET() {
 
       let title = slug;
       let description = "";
+      let categories: string[] = [];
+      let tags: string[] = [];
 
       if (f.content && f.encoding === "base64") {
         try {
@@ -33,12 +35,14 @@ export async function GET() {
           const parsed = parsePost(f.name, raw);
           title = parsed.title;
           description = parsed.description;
+          categories = parsed.categories;
+          tags = parsed.tags;
         } catch {
           // fall back to filename-based values
         }
       }
 
-      posts.push({ slug, filename: f.name, title, date, description });
+      posts.push({ slug, filename: f.name, title, date, description, categories, tags });
     }
 
     posts.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
@@ -56,7 +60,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { title, description, content } = await req.json();
+    const { title, description, content, date: reqDate, categories, tags } = await req.json();
     if (!title?.trim() || !content?.trim()) {
       return NextResponse.json(
         { error: "Title and content are required" },
@@ -64,10 +68,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const date = todayDate();
+    const date = reqDate && /^\d{4}-\d{2}-\d{2}$/.test(reqDate) ? reqDate : todayDate();
     const slug = generateSlug(title);
     const filename = `${date}-${slug}.md`;
-    const md = buildMarkdown({ title: title.trim(), date, description: (description || "").trim() }, content);
+    const md = buildMarkdown(
+      {
+        title: title.trim(),
+        date,
+        description: (description || "").trim(),
+        categories,
+        tags,
+      },
+      content
+    );
     const base64 = toBase64(md);
 
     await createOrUpdateFile(

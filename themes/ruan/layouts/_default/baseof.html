@@ -1,8 +1,12 @@
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+  <script>
+    (function(){var k='blog-theme';var s=localStorage.getItem(k);var d=document.documentElement;if(s==='dark'||s==='light'){d.setAttribute('data-theme',s)}else if(window.matchMedia('(prefers-color-scheme:dark)').matches){d.setAttribute('data-theme','dark')}})();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
@@ -21,7 +25,6 @@
     var KEY = 'blog-theme';
     var mqDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    // Always set data-theme explicitly so CSS only needs two sources of truth
     var saved = localStorage.getItem(KEY);
     if (saved === 'dark' || saved === 'light') {
       html.setAttribute('data-theme', saved);
@@ -29,23 +32,19 @@
       html.setAttribute('data-theme', 'dark');
     }
 
-    function updateIcon() {
+    function updateLabel() {
       var isDark = html.getAttribute('data-theme') === 'dark';
-      var lightIcon = document.querySelector('.icon-light');
-      var darkIcon = document.querySelector('.icon-dark');
-      if (lightIcon && darkIcon) {
-        lightIcon.style.display = isDark ? 'inline' : 'none';
-        darkIcon.style.display = isDark ? 'none' : 'inline';
-      }
+      var label = document.querySelector('.theme-toggle-label');
+      if (label) label.textContent = isDark ? 'Light' : 'Dark';
     }
-    updateIcon();
+    updateLabel();
 
     if (toggle) {
       toggle.addEventListener('click', function() {
         var isDark = html.getAttribute('data-theme') === 'dark';
         html.setAttribute('data-theme', isDark ? 'light' : 'dark');
         localStorage.setItem(KEY, isDark ? 'light' : 'dark');
-        updateIcon();
+        updateLabel();
       });
     }
 
@@ -53,7 +52,7 @@
       if (!localStorage.getItem(KEY)) {
         html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
       }
-      updateIcon();
+      updateLabel();
     });
   })();
   </script>

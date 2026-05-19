@@ -3,6 +3,10 @@ locale = 'zh-CN'
 title = 'AI 学习笔记'
 theme = 'ruan'
 
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
 [params]
   description = '每天学一点 AI，记录思考与成长'
   author = 'GUkirito'
@@ -11,6 +15,12 @@ theme = 'ruan'
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+    ordered = false
 
 [permalinks]
   posts = '/:contentbasename/'
+  categories = '/categories/:slug/'
+  tags = '/tags/:slug/'

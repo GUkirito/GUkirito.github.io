@@ -14,11 +14,17 @@ interface PostEditorProps {
   initialTitle?: string;
   initialDescription?: string;
   initialContent?: string;
+  initialDate?: string;
+  initialCategories?: string[];
+  initialTags?: string[];
   submitLabel?: string;
   onSubmit: (data: {
     title: string;
     description: string;
     content: string;
+    date: string;
+    categories: string[];
+    tags: string[];
   }) => Promise<void>;
   onDelete?: () => Promise<void>;
   saving?: boolean;
@@ -28,6 +34,9 @@ export default function PostEditor({
   initialTitle = "",
   initialDescription = "",
   initialContent = "",
+  initialDate = "",
+  initialCategories = [],
+  initialTags = [],
   submitLabel = "发 布",
   onSubmit,
   onDelete,
@@ -36,12 +45,33 @@ export default function PostEditor({
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
   const [content, setContent] = useState(initialContent);
+  const [date, setDate] = useState(initialDate);
+  const [categoriesStr, setCategoriesStr] = useState(
+    initialCategories.join(", ")
+  );
+  const [tagsStr, setTagsStr] = useState(initialTags.join(", "));
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!title.trim() || !content.trim()) return;
-    await onSubmit({ title, description, content });
+
+    const categories = categoriesStr
+      .split(/[,，]/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const tags = tagsStr
+      .split(/[,，]/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    await onSubmit({ title, description, content, date, categories, tags });
   }
+
+  const inputClass =
+    "w-full px-3 py-2 bg-surface-card border border-surface-border rounded-lg text-sm text-ink-body " +
+    "placeholder:text-ink-faint " +
+    "focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent " +
+    "transition-colors duration-150";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -55,10 +85,7 @@ export default function PostEditor({
           onChange={(e) => setTitle(e.target.value)}
           placeholder="文章标题"
           required
-          className="w-full px-3 py-2 bg-surface-card border border-surface-border rounded-lg text-sm text-ink-body
-                     placeholder:text-ink-faint
-                     focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent
-                     transition-colors duration-150"
+          className={inputClass}
         />
       </div>
 
@@ -71,11 +98,46 @@ export default function PostEditor({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="一句话简介，显示在首页"
-          className="w-full px-3 py-2 bg-surface-card border border-surface-border rounded-lg text-sm text-ink-body
-                     placeholder:text-ink-faint
-                     focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent
-                     transition-colors duration-150"
+          className={inputClass}
         />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-ink-body mb-1">
+            日期
+          </label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-ink-body mb-1">
+            分类（逗号分隔）
+          </label>
+          <input
+            type="text"
+            value={categoriesStr}
+            onChange={(e) => setCategoriesStr(e.target.value)}
+            placeholder="AI概念, AI实践"
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-ink-body mb-1">
+            标签（逗号分隔）
+          </label>
+          <input
+            type="text"
+            value={tagsStr}
+            onChange={(e) => setTagsStr(e.target.value)}
+            placeholder="LLM, 入门, 工作原理"
+            className={inputClass}
+          />
+        </div>
       </div>
 
       <div>

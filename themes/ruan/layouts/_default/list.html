@@ -1,25 +1,52 @@
 {{ define "main" }}
+{{ $isCategory := eq .Data.Singular "category" }}
+{{ $isTag := eq .Data.Singular "tag" }}
+
+{{ if or $isCategory $isTag }}
+  {{/* Taxonomy page */}}
+  <div class="list-header">
+    <a href="{{ "" | relURL }}" class="back-link">&larr; 首页</a>
+    <p class="list-label">{{ if $isCategory }}分类{{ else }}标签{{ end }}</p>
+    <h1 class="list-title">{{ .Title }}</h1>
+    <p class="list-count">{{ len .Pages }} 篇文章</p>
+  </div>
+{{ end }}
+
+{{ if gt (len .Pages) 0 }}
 <ul class="post-list">
   {{ range .Pages }}
   <li class="post-item">
-    <span class="post-date">{{ .Date.Format "2006年01月02日" }}</span>
-    <h2 class="post-title">
+    <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
+    <h3 class="post-title">
       <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-    </h2>
+    </h3>
     {{ with .Description }}
     <p class="post-excerpt">{{ . }}</p>
     {{ end }}
-    {{ if or .Params.tags .Params.categories }}
-    <div class="post-meta-extra">
+    <div class="post-meta-row">
+      {{ $charCount := countrunes .Content }}
+      {{ $readMin := div $charCount 450 }}
+      {{ if lt $readMin 1 }}{{ $readMin = 1 }}{{ end }}
+      <span class="post-reading-time">{{ $readMin }} min read</span>
+      {{ if .Params.categories }}
+      <span class="post-meta-sep">&middot;</span>
       {{ range .Params.categories }}
-      <a href="{{ "/categories/" | relURL }}{{ . | urlize }}" class="category">{{ . }}</a>
+      <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
       {{ end }}
+      {{ end }}
+      {{ if .Params.tags }}
       {{ range .Params.tags }}
-      <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag">{{ . }}</a>
+      <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-tag">{{ . }}</a>
+      {{ end }}
       {{ end }}
     </div>
-    {{ end }}
   </li>
   {{ end }}
 </ul>
+{{ else }}
+<div class="empty-state">
+  <p>这个{{ if $isCategory }}分类{{ else if $isTag }}标签{{ end }}下还没有文章。</p>
+  <a href="{{ "" | relURL }}" class="empty-link">回到首页</a>
+</div>
+{{ end }}
 {{ end }}

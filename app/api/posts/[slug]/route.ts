@@ -59,7 +59,7 @@ export async function PUT(
     const raw = Buffer.from(existing.content, "base64").toString("utf-8");
     const existingPost = parsePost(`${params.slug}.md`, raw);
 
-    const { title, description, content } = await req.json();
+    const { title, description, content, date: reqDate, categories, tags } = await req.json();
     if (!title?.trim() || !content?.trim()) {
       return NextResponse.json(
         { error: "Title and content are required" },
@@ -67,11 +67,14 @@ export async function PUT(
       );
     }
 
+    const date = reqDate && /^\d{4}-\d{2}-\d{2}$/.test(reqDate) ? reqDate : (existingPost.date || todayDate());
     const md = buildMarkdown(
       {
         title: title.trim(),
-        date: existingPost.date || todayDate(),
+        date,
         description: (description || "").trim(),
+        categories: categories !== undefined ? categories : existingPost.categories,
+        tags: tags !== undefined ? tags : existingPost.tags,
       },
       content
     );

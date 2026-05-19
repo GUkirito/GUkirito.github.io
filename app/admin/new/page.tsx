@@ -26,6 +26,9 @@ export default function NewPostPage() {
     title: string;
     description: string;
     content: string;
+    date: string;
+    categories: string[];
+    tags: string[];
   }) {
     setSaving(true);
     setMessage(null);

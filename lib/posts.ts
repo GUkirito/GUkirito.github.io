@@ -6,6 +6,8 @@ export interface PostMeta {
   title: string;
   date: string;
   description: string;
+  categories: string[];
+  tags: string[];
 }
 
 export interface Post extends PostMeta {
@@ -26,6 +28,8 @@ export function parsePost(
     title: data.title || "",
     date: toDateString(data.date),
     description: data.description || "",
+    categories: normalizeStringArray(data.categories),
+    tags: normalizeStringArray(data.tags),
     content,
     sha,
   };
@@ -40,21 +44,36 @@ export function generateSlug(title: string): string {
     .replace(/-+$/, "");
 }
 
-export function buildMarkdown(meta: {
-  title: string;
-  date: string;
-  description: string;
-}, body: string): string {
+export function buildMarkdown(
+  meta: {
+    title: string;
+    date: string;
+    description: string;
+    categories?: string[];
+    tags?: string[];
+  },
+  body: string
+): string {
   const esc = (s: string) => s.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-  return [
+  const lines: string[] = [
     "---",
     `title: "${esc(meta.title)}"`,
     `date: ${meta.date}`,
     `description: "${esc(meta.description)}"`,
-    "---",
-    "",
-    body.trimStart(),
-  ].join("\n");
+  ];
+
+  if (meta.categories && meta.categories.length > 0) {
+    const cats = meta.categories.map((c) => `"${esc(c)}"`).join(", ");
+    lines.push(`categories: [${cats}]`);
+  }
+
+  if (meta.tags && meta.tags.length > 0) {
+    const tags = meta.tags.map((t) => `"${esc(t)}"`).join(", ");
+    lines.push(`tags: [${tags}]`);
+  }
+
+  lines.push("---", "", body.trimStart());
+  return lines.join("\n");
 }
 
 export function todayDate(): string {
@@ -65,4 +84,10 @@ function toDateString(d: unknown): string {
   if (d instanceof Date) return d.toISOString().slice(0, 10);
   if (typeof d === "string") return d.slice(0, 10);
   return "";
+}
+
+function normalizeStringArray(v: unknown): string[] {
+  if (Array.isArray(v)) return v.map((x) => String(x).trim()).filter(Boolean);
+  if (typeof v === "string") return v.split(",").map((x) => x.trim()).filter(Boolean);
+  return [];
 }
