@@ -44,7 +44,7 @@
   {{ end }}
 
   {{/* ---------- TOC ---------- */}}
-  {{ if and .TableOfContents (gt (len (findRE "<li>" .TableOfContents)) 0) }}
+  {{ if and .TableOfContents (in .TableOfContents "<li>") }}
   <details class="toc" open>
     <summary class="toc-title">目录</summary>
     <div class="toc-content">
@@ -72,13 +72,14 @@
 
 {{/* ---------- Related articles ---------- */}}
 {{ $related := slice }}
-{{ $currentTags := .Params.tags }}
+{{ $currentTags := .Params.tags | default slice }}
+{{ $currentCats := .Params.categories | default slice }}
 {{ $currentSlug := .Slug }}
 {{ range where .Site.RegularPages "Params.draft" "!=" true }}
-  {{ if ne .Slug $currentSlug }}
+  {{ if and (ne .Slug $currentSlug) (or .Params.tags .Params.categories) }}
     {{ $score := 0 }}
     {{ range .Params.tags }}{{ if in $currentTags . }}{{ $score = add $score 2 }}{{ end }}{{ end }}
-    {{ range .Params.categories }}{{ if in $.Params.categories . }}{{ $score = add $score 1 }}{{ end }}{{ end }}
+    {{ range .Params.categories }}{{ if in $currentCats . }}{{ $score = add $score 1 }}{{ end }}{{ end }}
     {{ if gt $score 0 }}
       {{ $related = $related | append (dict "score" $score "page" .) }}
     {{ end }}

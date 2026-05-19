@@ -59,25 +59,20 @@
 {{ end }}
 
 {{/* ---------- Series area ---------- */}}
-{{ $allSeries := slice }}
-{{ range $posts }}
-  {{ with .Params.series }}{{ $allSeries = $allSeries | append (dict "name" . "order" ($.Params.series_order | default 0) "page" . ) }}{{ end }}
-{{ end }}
 {{ $uniqueSeries := slice }}
-{{ $seen := dict }}
-{{ range $allSeries }}
-  {{ if not (index $seen .name) }}
+{{ range $posts }}
+  {{ with .Params.series }}
     {{ $uniqueSeries = $uniqueSeries | append . }}
-    {{ $seen = merge $seen (dict .name true) }}
   {{ end }}
 {{ end }}
-{{ if $uniqueSeries }}
+{{ $uniqueSeries = uniq $uniqueSeries }}
+{{ if gt (len $uniqueSeries) 0 }}
 <section class="series-index content-index">
   <div class="index-group">
     <span class="index-label">学习路径</span>
     <div class="index-pills">
       {{ range $uniqueSeries }}
-      <a href="{{ "series/" | relURL }}{{ .name | urlize }}" class="pill pill-series">{{ .name }}</a>
+      <a href="{{ "series/" | relURL }}{{ . | urlize }}" class="pill pill-series">{{ . }}</a>
       {{ end }}
     </div>
   </div>

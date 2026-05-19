@@ -22,7 +22,7 @@ theme = 'ruan'
     ordered = false
 
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS", "SearchIndex"]
 
 [outputFormats.SearchIndex]
   mediaType = "application/json"
