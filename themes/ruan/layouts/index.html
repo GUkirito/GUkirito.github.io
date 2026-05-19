@@ -49,8 +49,8 @@
   <div class="index-group">
     <span class="index-label">标签</span>
     <div class="index-pills">
-      {{ range first 12 $tags }}
-      <a href="{{ "tags/" | relURL }}{{ .Term | urlize }}" class="pill pill-tag">{{ .Term }}</a>
+      {{ range $name, $_ := $tags }}
+      <a href="{{ "tags/" | relURL }}{{ $name | urlize }}" class="pill pill-tag">{{ $name }}</a>
       {{ end }}
     </div>
   </div>
