@@ -59,7 +59,7 @@ export async function PUT(
     const raw = Buffer.from(existing.content, "base64").toString("utf-8");
     const existingPost = parsePost(`${params.slug}.md`, raw);
 
-    const { title, description, content, date: reqDate, categories, tags } = await req.json();
+    const { title, description, content, date: reqDate, categories, tags, draft } = await req.json();
     if (!title?.trim() || !content?.trim()) {
       return NextResponse.json(
         { error: "Title and content are required" },
@@ -75,6 +75,7 @@ export async function PUT(
         description: (description || "").trim(),
         categories: categories !== undefined ? categories : existingPost.categories,
         tags: tags !== undefined ? tags : existingPost.tags,
+        draft: draft !== undefined ? draft : existingPost.draft,
       },
       content
     );

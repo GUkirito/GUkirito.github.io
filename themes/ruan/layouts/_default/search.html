@@ -1,0 +1,78 @@
+{{ define "main" }}
+<div class="list-header">
+  <a href="{{ "" | relURL }}" class="back-link">&larr; 首页</a>
+  <p class="list-label">搜索</p>
+  <h1 class="list-title">站内搜索</h1>
+</div>
+
+<div class="search-container">
+  <input type="text" id="searchInput" class="search-input" placeholder="输入关键词搜索..." autocomplete="off" autofocus>
+  <div id="searchResults" class="search-results">
+    <p class="search-hint">输入关键词即时搜索，支持标题、摘要、标签、分类。</p>
+  </div>
+</div>
+
+<script>
+(function() {
+  var input = document.getElementById('searchInput');
+  var results = document.getElementById('searchResults');
+  var index = null;
+
+  fetch('{{ "search-index.json" | relURL }}')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      index = data;
+      var val = input.value.trim();
+      if (val) doSearch(val);
+    })
+    .catch(function() {
+      results.innerHTML = '<p class="search-error">加载搜索索引失败，请刷新重试。</p>';
+    });
+
+  input.addEventListener('input', function() {
+    var val = this.value.trim();
+    if (!index) return;
+    if (!val) {
+      results.innerHTML = '<p class="search-hint">输入关键词即时搜索，支持标题、摘要、标签、分类。</p>';
+      return;
+    }
+    doSearch(val);
+  });
+
+  function doSearch(q) {
+    var lower = q.toLowerCase();
+    var terms = lower.split(/\s+/).filter(Boolean);
+
+    var matched = index.filter(function(item) {
+      var haystack = [item.title, item.description, item.summary, item.categories.join(' '), item.tags.join(' ')].join(' ').toLowerCase();
+      return terms.every(function(t) { return haystack.indexOf(t) !== -1; });
+    });
+
+    if (!matched.length) {
+      results.innerHTML = '<p class="search-empty">没有找到匹配的文章。</p>';
+      return;
+    }
+
+    var html = '<p class="search-count">找到 ' + matched.length + ' 篇文章</p><ul class="post-list search-results-list">';
+    matched.forEach(function(item) {
+      html += '<li class="post-item">' +
+        '<span class="post-date">' + item.date + '</span>' +
+        '<h3 class="post-title"><a href="' + item.url + '">' + escapeHtml(item.title) + '</a></h3>' +
+        (item.description ? '<p class="post-excerpt">' + escapeHtml(item.description) + '</p>' : '') +
+        '<div class="post-meta-row">' +
+        (item.categories.length ? item.categories.map(function(c) { return '<a href="{{ "categories/" | relURL }}' + c.toLowerCase() + '" class="meta-link meta-link-category">' + escapeHtml(c) + '</a>'; }).join('') : '') +
+        (item.tags.length ? item.tags.map(function(t) { return '<a href="{{ "tags/" | relURL }}' + t.toLowerCase() + '" class="meta-link meta-link-tag">' + escapeHtml(t) + '</a>'; }).join('') : '') +
+        '</div></li>';
+    });
+    html += '</ul>';
+    results.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+})();
+</script>
+{{ end }}

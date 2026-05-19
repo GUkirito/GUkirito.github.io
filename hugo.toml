@@ -6,6 +6,7 @@ theme = 'ruan'
 [taxonomies]
   category = 'categories'
   tag = 'tags'
+  series = 'series'
 
 [params]
   description = '每天学一点 AI，记录思考与成长'
@@ -20,7 +21,16 @@ theme = 'ruan'
     endLevel = 3
     ordered = false
 
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[outputFormats.SearchIndex]
+  mediaType = "application/json"
+  baseName = "search-index"
+  isPlainText = true
+
 [permalinks]
   posts = '/:contentbasename/'
   categories = '/categories/:slug/'
   tags = '/tags/:slug/'
+  series = '/series/:slug/'

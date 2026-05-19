@@ -3,13 +3,15 @@
     <h1 class="site-title"><a href="{{ "" | relURL }}">{{ .Site.Title }}</a></h1>
     <p class="site-tagline">{{ .Site.Params.description }}</p>
   </div>
-  <nav class="site-nav">
+  <nav class="site-nav" role="navigation" aria-label="主导航">
     <a href="{{ "" | relURL }}">首页</a>
+    <a href="{{ "archives/" | relURL }}">归档</a>
     <a href="{{ "categories/" | relURL }}">分类</a>
     <a href="{{ "tags/" | relURL }}">标签</a>
+    <a href="{{ "search/" | relURL }}">搜索</a>
     <a href="/login">写作</a>
     <button class="theme-toggle" id="themeToggle" aria-label="切换暗色模式" title="切换暗色模式">
-      <span class="theme-toggle-label">Dark</span>
+      <span class="theme-toggle-label">暗色</span>
     </button>
   </nav>
 </header>

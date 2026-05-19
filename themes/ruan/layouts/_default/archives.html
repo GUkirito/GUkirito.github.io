@@ -1,0 +1,49 @@
+{{ define "main" }}
+{{ $posts := where .Site.RegularPages "Params.draft" "!=" true }}
+{{ $postCount := len $posts }}
+
+<div class="list-header">
+  <a href="{{ "" | relURL }}" class="back-link">&larr; 首页</a>
+  <p class="list-label">归档</p>
+  <h1 class="list-title">全部文章</h1>
+  <p class="list-count">{{ $postCount }} 篇文章</p>
+</div>
+
+{{ if gt $postCount 0 }}
+{{ $byYear := $posts.GroupByDate "2006" }}
+{{ range $byYear }}
+<section class="archive-year">
+  <h2 class="archive-year-heading">{{ .Key }}</h2>
+  {{ $byMonth := .Pages.GroupByDate "01" }}
+  {{ range $byMonth }}
+  <div class="archive-month-group">
+    <h3 class="archive-month-heading">
+      {{ $monthNum := int .Key }}
+      {{ index (slice "" "一月" "二月" "三月" "四月" "五月" "六月" "七月" "八月" "九月" "十月" "十一月" "十二月") $monthNum }}
+    </h3>
+    <ul class="archive-post-list">
+      {{ range .Pages }}
+      <li class="archive-post-item">
+        <span class="archive-post-date">{{ .Date.Format "01-02" }}</span>
+        <a href="{{ .RelPermalink }}" class="archive-post-title">{{ .Title }}</a>
+        {{ if .Params.categories }}
+        <span class="archive-post-meta">
+          {{ range .Params.categories }}
+          <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
+          {{ end }}
+        </span>
+        {{ end }}
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+  {{ end }}
+</section>
+{{ end }}
+{{ else }}
+<div class="empty-state">
+  <p>还没有文章。</p>
+  <a href="/login" class="empty-link">开始写作</a>
+</div>
+{{ end }}
+{{ end }}

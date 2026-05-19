@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+  {{ $desc := "" }}
+  {{ if .Description }}{{ $desc = .Description }}
+  {{ else if .IsHome }}{{ $desc = .Site.Params.description }}
+  {{ else if .Summary }}{{ $desc = .Summary | truncate 160 }}
+  {{ end }}
+  {{ with $desc }}<meta name="description" content="{{ . }}">{{ end }}
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{ with .OutputFormats.Get "RSS" }}<link rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" href="{{ .RelPermalink }}">{{ end }}
+  {{ template "_internal/opengraph.html" . }}
+  {{ template "_internal/twitter_cards.html" . }}
   <script>
     (function(){var k='blog-theme';var s=localStorage.getItem(k);var d=document.documentElement;if(s==='dark'||s==='light'){d.setAttribute('data-theme',s)}else if(window.matchMedia('(prefers-color-scheme:dark)').matches){d.setAttribute('data-theme','dark')}})();
   </script>
@@ -11,6 +22,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+  {{ if .IsPage }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ .Title | jsonify }},
+    "datePublished": "{{ .Date.Format "2006-01-02T15:04:05-07:00" }}",
+    "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}",
+    "author": { "@type": "Person", "name": "{{ .Site.Params.author }}" },
+    "description": {{ .Description | jsonify }}
+  }
+  </script>
+  {{ else if .IsHome }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": {{ .Site.Title | jsonify }},
+    "description": {{ .Site.Params.description | jsonify }},
+    "url": "{{ .Site.BaseURL }}",
+    "author": { "@type": "Person", "name": "{{ .Site.Params.author }}" }
+  }
+  </script>
+  {{ end }}
 </head>
 <body>
   {{ partial "header.html" . }}
@@ -35,7 +70,7 @@
     function updateLabel() {
       var isDark = html.getAttribute('data-theme') === 'dark';
       var label = document.querySelector('.theme-toggle-label');
-      if (label) label.textContent = isDark ? 'Light' : 'Dark';
+      if (label) label.textContent = isDark ? '亮色' : '暗色';
     }
     updateLabel();
 

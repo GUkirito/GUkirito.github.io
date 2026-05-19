@@ -4,6 +4,8 @@ date: 2026-05-13
 description: "嵌入是 AI 领域最重要的概念之一，它是大模型理解语义、做搜索、做推荐的基础。我们用最简单的方式讲清楚它……"
 categories: ["AI概念"]
 tags: ["Embedding", "语义搜索", "RAG", "嵌入"]
+series: "AI 基础概念"
+series_order: 1
 ---
 
 如果你用过 ChatGPT 的"知识库"功能，或者听说过"语义搜索"，那你已经间接接触过 Embedding 了。它是现代 AI 最基础也最重要的概念之一。

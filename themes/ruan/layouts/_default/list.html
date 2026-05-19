@@ -27,7 +27,7 @@
       {{ $charCount := countrunes .Content }}
       {{ $readMin := div $charCount 450 }}
       {{ if lt $readMin 1 }}{{ $readMin = 1 }}{{ end }}
-      <span class="post-reading-time">{{ $readMin }} min read</span>
+      <span class="post-reading-time">约 {{ $readMin }} 分钟</span>
       {{ if .Params.categories }}
       <span class="post-meta-sep">&middot;</span>
       {{ range .Params.categories }}

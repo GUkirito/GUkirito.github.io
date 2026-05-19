@@ -8,6 +8,7 @@ export interface PostMeta {
   description: string;
   categories: string[];
   tags: string[];
+  draft: boolean;
 }
 
 export interface Post extends PostMeta {
@@ -30,6 +31,7 @@ export function parsePost(
     description: data.description || "",
     categories: normalizeStringArray(data.categories),
     tags: normalizeStringArray(data.tags),
+    draft: data.draft === true || data.draft === "true",
     content,
     sha,
   };
@@ -51,6 +53,7 @@ export function buildMarkdown(
     description: string;
     categories?: string[];
     tags?: string[];
+    draft?: boolean;
   },
   body: string
 ): string {
@@ -70,6 +73,10 @@ export function buildMarkdown(
   if (meta.tags && meta.tags.length > 0) {
     const tags = meta.tags.map((t) => `"${esc(t)}"`).join(", ");
     lines.push(`tags: [${tags}]`);
+  }
+
+  if (meta.draft) {
+    lines.push("draft: true");
   }
 
   lines.push("---", "", body.trimStart());

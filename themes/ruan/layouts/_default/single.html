@@ -3,6 +3,10 @@
 {{ $readMin := div $charCount 450 }}
 {{ if lt $readMin 1 }}{{ $readMin = 1 }}{{ end }}
 
+<div class="reading-progress" id="readingProgress" aria-hidden="true">
+  <div class="reading-progress-bar" id="readingProgressBar"></div>
+</div>
+
 <a href="{{ "" | relURL }}" class="back-link">&larr; 首页</a>
 
 <article>
@@ -10,12 +14,34 @@
     <h1 class="article-title">{{ .Title }}</h1>
     <div class="article-meta">
       <span>{{ .Date.Format "2006-01-02" }}</span>
-      <span>&middot; {{ $readMin }} min read</span>
+      <span>&middot; 约 {{ $readMin }} 分钟</span>
       {{ range .Params.categories }}
       <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
       {{ end }}
+      {{ if .Draft }}<span class="draft-badge">草稿</span>{{ end }}
     </div>
   </header>
+
+  {{/* ---------- Series module ---------- */}}
+  {{ with .Params.series }}
+  {{ $seriesName := . }}
+  {{ $seriesOrder := $.Params.series_order | default 0 }}
+  <nav class="series-module" aria-label="学习路径">
+    <p class="series-label">学习路径：<a href="{{ "series/" | relURL }}{{ $seriesName | urlize }}">{{ $seriesName }}</a></p>
+    <ol class="series-list">
+      {{ $seriesPosts := where $.Site.RegularPages "Params.series" $seriesName }}
+      {{ range sort $seriesPosts "Params.series_order" }}
+      <li>
+        {{ if eq .RelPermalink $.RelPermalink }}
+        <span class="series-current">{{ .Title }}</span>
+        {{ else }}
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ end }}
+      </li>
+      {{ end }}
+    </ol>
+  </nav>
+  {{ end }}
 
   {{/* ---------- TOC ---------- */}}
   {{ if and .TableOfContents (gt (len (findRE "<li>" .TableOfContents)) 0) }}
@@ -27,7 +53,7 @@
   </details>
   {{ end }}
 
-  <div class="article-content">
+  <div class="article-content" id="articleContent">
     {{ .Content }}
   </div>
 
@@ -44,6 +70,35 @@
   {{ end }}
 </article>
 
+{{/* ---------- Related articles ---------- */}}
+{{ $related := slice }}
+{{ $currentTags := .Params.tags }}
+{{ $currentSlug := .Slug }}
+{{ range where .Site.RegularPages "Params.draft" "!=" true }}
+  {{ if ne .Slug $currentSlug }}
+    {{ $score := 0 }}
+    {{ range .Params.tags }}{{ if in $currentTags . }}{{ $score = add $score 2 }}{{ end }}{{ end }}
+    {{ range .Params.categories }}{{ if in $.Params.categories . }}{{ $score = add $score 1 }}{{ end }}{{ end }}
+    {{ if gt $score 0 }}
+      {{ $related = $related | append (dict "score" $score "page" .) }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ $related = sort $related "score" "desc" }}
+{{ if gt (len $related) 0 }}
+<section class="related-posts">
+  <h2 class="section-heading">相关文章</h2>
+  <ul class="related-list">
+    {{ range first 3 $related }}
+    <li class="related-item">
+      <span class="post-date">{{ .page.Date.Format "2006-01-02" }}</span>
+      <a href="{{ .page.RelPermalink }}" class="related-title">{{ .page.Title }}</a>
+    </li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}
+
 {{/* ---------- Prev / Next ---------- */}}
 <nav class="prev-next">
   {{ with .PrevInSection }}
@@ -59,4 +114,58 @@
   </a>
   {{ end }}
 </nav>
+
+<script>
+(function(){
+  /* Reading progress bar */
+  var bar = document.getElementById('readingProgressBar');
+  if (bar) {
+    window.addEventListener('scroll', function() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
+      bar.style.width = pct + '%';
+    }, {passive: true});
+  }
+
+  /* Heading anchors */
+  var headings = document.querySelectorAll('.article-content h2[id], .article-content h3[id]');
+  headings.forEach(function(h) {
+    h.style.position = 'relative';
+    h.style.cursor = 'pointer';
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.className = 'heading-anchor';
+    a.setAttribute('aria-label', '复制链接');
+    a.textContent = '#';
+    h.appendChild(a);
+  });
+
+  /* Code copy buttons */
+  var pres = document.querySelectorAll('.article-content pre');
+  pres.forEach(function(pre) {
+    var wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+
+    var btn = document.createElement('button');
+    btn.className = 'code-copy-btn';
+    btn.textContent = '复制';
+    btn.setAttribute('aria-label', '复制代码');
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code');
+      var text = code ? code.textContent : pre.textContent;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '已复制';
+        setTimeout(function(){ btn.textContent = '复制'; }, 1500);
+      }).catch(function() {
+        btn.textContent = '复制失败';
+        setTimeout(function(){ btn.textContent = '复制'; }, 1500);
+      });
+    });
+    wrapper.appendChild(btn);
+  });
+})();
+</script>
 {{ end }}

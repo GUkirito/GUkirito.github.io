@@ -9,6 +9,7 @@ export default function NewPostPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [resultSlug, setResultSlug] = useState<string | null>(null);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -29,6 +30,7 @@ export default function NewPostPage() {
     date: string;
     categories: string[];
     tags: string[];
+    draft: boolean;
   }) {
     setSaving(true);
     setMessage(null);
@@ -42,17 +44,15 @@ export default function NewPostPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || "Publish failed");
+        throw new Error(err.error || "发布失败");
       }
 
       const result = await res.json();
+      setResultSlug(result.slug);
       setMessage({
         type: "success",
-        text: `发布成功！跳转到编辑页...`,
+        text: `发布成功！`,
       });
-      setTimeout(() => {
-        router.push(`/admin/edit/${result.slug}`);
-      }, 800);
     } catch (err: unknown) {
       setMessage({
         type: "error",
@@ -78,6 +78,24 @@ export default function NewPostPage() {
           }`}
         >
           {message.text}
+          {message.type === "success" && resultSlug && (
+            <div className="flex items-center gap-3 mt-2">
+              <a
+                href={`/${resultSlug}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-400 hover:underline font-medium text-xs"
+              >
+                查看文章
+              </a>
+              <a
+                href={`/admin/edit/${resultSlug}`}
+                className="text-ink-muted hover:text-accent transition-colors duration-150 text-xs"
+              >
+                继续编辑
+              </a>
+            </div>
+          )}
         </div>
       )}
 
@@ -85,7 +103,8 @@ export default function NewPostPage() {
         <PostEditor
           onSubmit={handleSubmit}
           saving={saving}
-          submitLabel="发 布"
+          submitLabel="发布"
+          isNew
         />
       </div>
     </div>

@@ -16,6 +16,7 @@ export default function EditPostPage() {
   const [date, setDate] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
+  const [draft, setDraft] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{
@@ -37,6 +38,7 @@ export default function EditPostPage() {
         setDate(data.date || "");
         setCategories(data.categories || []);
         setTags(data.tags || []);
+        setDraft(data.draft || false);
       })
       .catch(() => setMessage({ type: "error", text: "加载文章失败" }))
       .finally(() => setLoading(false));
@@ -49,6 +51,7 @@ export default function EditPostPage() {
     date: string;
     categories: string[];
     tags: string[];
+    draft: boolean;
   }) {
     setSaving(true);
     setMessage(null);
@@ -135,10 +138,12 @@ export default function EditPostPage() {
           initialDate={date}
           initialCategories={categories}
           initialTags={tags}
+          initialDraft={draft}
+          slug={slug as string}
           onSubmit={handleSubmit}
           onDelete={handleDelete}
           saving={saving}
-          submitLabel="保 存"
+          submitLabel="保存"
         />
       </div>
     </div>

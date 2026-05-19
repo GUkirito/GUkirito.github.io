@@ -1,10 +1,12 @@
 {{ define "main" }}
-{{ $posts := .Site.RegularPages }}
+{{ $posts := where .Site.RegularPages "Params.draft" "!=" true }}
 {{ $postCount := len $posts }}
 {{ $lastUpdated := "" }}
+{{ $recentTags := slice }}
 {{ if gt $postCount 0 }}
   {{ $latest := index $posts 0 }}
   {{ $lastUpdated = $latest.Date.Format "2006-01-02" }}
+  {{ $recentTags = $latest.Params.tags }}
 {{ end }}
 
 {{/* ---------- Intro block ---------- */}}
@@ -19,6 +21,11 @@
     <span><strong>{{ $postCount }}</strong> 篇文章</span>
     {{ if $lastUpdated }}
     <span>最近更新 <strong>{{ $lastUpdated }}</strong></span>
+    {{ end }}
+    {{ if $recentTags }}
+    <span class="intro-focus">
+      最近关注 {{ range $recentTags }}<a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-tag">{{ . }}</a>{{ end }}
+    </span>
     {{ end }}
   </div>
 </section>
@@ -42,12 +49,38 @@
   <div class="index-group">
     <span class="index-label">标签</span>
     <div class="index-pills">
-      {{ range $name, $_ := $tags }}
-      <a href="{{ "tags/" | relURL }}{{ $name | urlize }}" class="pill pill-tag">{{ $name }}</a>
+      {{ range first 12 $tags }}
+      <a href="{{ "tags/" | relURL }}{{ .Term | urlize }}" class="pill pill-tag">{{ .Term }}</a>
       {{ end }}
     </div>
   </div>
   {{ end }}
+</section>
+{{ end }}
+
+{{/* ---------- Series area ---------- */}}
+{{ $allSeries := slice }}
+{{ range $posts }}
+  {{ with .Params.series }}{{ $allSeries = $allSeries | append (dict "name" . "order" ($.Params.series_order | default 0) "page" . ) }}{{ end }}
+{{ end }}
+{{ $uniqueSeries := slice }}
+{{ $seen := dict }}
+{{ range $allSeries }}
+  {{ if not (index $seen .name) }}
+    {{ $uniqueSeries = $uniqueSeries | append . }}
+    {{ $seen = merge $seen (dict .name true) }}
+  {{ end }}
+{{ end }}
+{{ if $uniqueSeries }}
+<section class="series-index content-index">
+  <div class="index-group">
+    <span class="index-label">学习路径</span>
+    <div class="index-pills">
+      {{ range $uniqueSeries }}
+      <a href="{{ "series/" | relURL }}{{ .name | urlize }}" class="pill pill-series">{{ .name }}</a>
+      {{ end }}
+    </div>
+  </div>
 </section>
 {{ end }}
 
@@ -69,7 +102,7 @@
         {{ $charCount := countrunes .Content }}
         {{ $readMin := div $charCount 450 }}
         {{ if lt $readMin 1 }}{{ $readMin = 1 }}{{ end }}
-        <span class="post-reading-time">{{ $readMin }} min read</span>
+        <span class="post-reading-time">约 {{ $readMin }} 分钟</span>
         {{ if .Params.categories }}
         <span class="post-meta-sep">&middot;</span>
         {{ range .Params.categories }}
