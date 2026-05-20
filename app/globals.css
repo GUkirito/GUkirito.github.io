@@ -43,4 +43,24 @@
     background-color: var(--color-bg);
     color: var(--color-text);
   }
+
+  /* Glass sidebar fallback */
+  .glass-sidebar {
+    background: oklch(24% 0.004 250 / 0.80);
+  }
+  @supports not (backdrop-filter: blur(1px)) {
+    .glass-sidebar {
+      background: oklch(24% 0.004 250);
+    }
+  }
+  @media (prefers-color-scheme: light) {
+    .glass-sidebar {
+      background: oklch(99% 0.001 250 / 0.80);
+    }
+    @supports not (backdrop-filter: blur(1px)) {
+      .glass-sidebar {
+        background: oklch(99% 0.001 250);
+      }
+    }
+  }
 }
