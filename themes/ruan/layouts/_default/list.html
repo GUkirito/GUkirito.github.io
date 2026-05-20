@@ -2,27 +2,23 @@
 {{ $isCategory := eq .Data.Singular "category" }}
 {{ $isTag := eq .Data.Singular "tag" }}
 
-{{ if or $isCategory $isTag }}
-  {{/* Taxonomy page */}}
-  <div class="list-header">
-    <a href="{{ "" | relURL }}" class="back-link">&larr; 首页</a>
-    <p class="list-label">{{ if $isCategory }}分类{{ else }}标签{{ end }}</p>
-    <h1 class="list-title">{{ .Title }}</h1>
-    <p class="list-count">{{ len .Pages }} 篇文章</p>
-  </div>
+{{ if eq .Kind "term" }}
+<div class="list-header">
+  <a href="{{ "" | relURL }}" class="back-link">&larr; 首页</a>
+  <p class="list-label">{{ if $isCategory }}分类{{ else }}标签{{ end }}</p>
+  <h1 class="list-title">{{ .Title }}</h1>
+  <p class="list-count">{{ len .Pages }} 篇文章</p>
+</div>
 {{ end }}
 
+{{ if eq .Kind "term" }}
 {{ if gt (len .Pages) 0 }}
 <ul class="post-list">
   {{ range .Pages }}
   <li class="post-item">
     <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
-    <h3 class="post-title">
-      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-    </h3>
-    {{ with .Description }}
-    <p class="post-excerpt">{{ . }}</p>
-    {{ end }}
+    <h3 class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    {{ with .Description }}<p class="post-excerpt">{{ . }}</p>{{ end }}
     <div class="post-meta-row">
       {{ $charCount := countrunes .Content }}
       {{ $readMin := div $charCount 450 }}
@@ -31,13 +27,15 @@
       {{ if .Params.categories }}
       <span class="post-meta-sep">&middot;</span>
       {{ range .Params.categories }}
-      <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
+      <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link--category">{{ . }}</a>
       {{ end }}
       {{ end }}
-      {{ if .Params.tags }}
-      {{ range .Params.tags }}
-      <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-tag">{{ . }}</a>
+      {{ $tagCount := len .Params.tags }}
+      {{ if gt $tagCount 0 }}
+      {{ range first 3 .Params.tags }}
+      <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="meta-link meta-link--tag">{{ . }}</a>
       {{ end }}
+      {{ if gt $tagCount 3 }}<span class="post-reading-time">+{{ sub $tagCount 3 }}</span>{{ end }}
       {{ end }}
     </div>
   </li>
@@ -48,5 +46,15 @@
   <p>这个{{ if $isCategory }}分类{{ else if $isTag }}标签{{ end }}下还没有文章。</p>
   <a href="{{ "" | relURL }}" class="empty-link">回到首页</a>
 </div>
+{{ end }}
+{{ else }}
+{{/* Taxonomy root page: show term list */}}
+{{ if gt (len .Pages) 0 }}
+<div class="index-pills" style="margin-top:var(--space-lg)">
+  {{ range .Pages }}
+  <a href="{{ .RelPermalink }}" class="chip {{ if $isCategory }}chip--category{{ else }}chip--tag{{ end }}">{{ .Title }}</a>
+  {{ end }}
+</div>
+{{ end }}
 {{ end }}
 {{ end }}

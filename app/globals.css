@@ -4,32 +4,38 @@
 
 @layer base {
   :root {
-    --color-bg: oklch(17% 0.005 210);
-    --color-surface: oklch(22% 0.006 210);
-    --color-text-heading: oklch(92% 0.002 210);
-    --color-text: oklch(82% 0.003 210);
-    --color-text-muted: oklch(65% 0.005 210);
-    --color-border: oklch(28% 0.005 210);
-    --color-border-light: oklch(23% 0.005 210);
-    --color-accent: oklch(65% 0.12 210);
-    --color-accent-hover: oklch(72% 0.12 210);
-    --color-danger: oklch(60% 0.18 20);
-    --color-danger-bg: oklch(25% 0.04 20);
+    --color-bg: oklch(18% 0.003 250);
+    --color-surface: oklch(24% 0.004 250);
+    --color-surface-muted: oklch(20% 0.003 250);
+    --color-text-heading: oklch(92% 0.002 250);
+    --color-text: oklch(82% 0.003 250);
+    --color-text-muted: oklch(50% 0.004 250);
+    --color-text-faint: oklch(40% 0.004 250);
+    --color-border: oklch(30% 0.005 250);
+    --color-border-light: oklch(23% 0.004 250);
+    --color-accent: oklch(65% 0.14 255);
+    --color-accent-hover: oklch(72% 0.13 255);
+    --color-accent-soft: oklch(25% 0.06 255);
+    --color-danger: oklch(62% 0.18 25);
+    --color-success: oklch(65% 0.13 155);
   }
 
   @media (prefers-color-scheme: light) {
     :root {
-      --color-bg: oklch(97% 0.003 210);
-      --color-surface: oklch(99% 0.001 210);
-      --color-text-heading: oklch(20% 0.005 210);
-      --color-text: oklch(30% 0.005 210);
-      --color-text-muted: oklch(48% 0.005 210);
-      --color-border: oklch(88% 0.004 210);
-      --color-border-light: oklch(92% 0.003 210);
-      --color-accent: oklch(55% 0.12 210);
-      --color-accent-hover: oklch(50% 0.12 210);
+      --color-bg: oklch(96% 0.002 250);
+      --color-surface: oklch(99% 0.001 250);
+      --color-surface-muted: oklch(93% 0.003 250);
+      --color-text-heading: oklch(18% 0.003 250);
+      --color-text: oklch(30% 0.004 250);
+      --color-text-muted: oklch(60% 0.004 250);
+      --color-text-faint: oklch(70% 0.004 250);
+      --color-border: oklch(88% 0.004 250);
+      --color-border-light: oklch(92% 0.003 250);
+      --color-accent: oklch(50% 0.18 255);
+      --color-accent-hover: oklch(44% 0.19 255);
+      --color-accent-soft: oklch(92% 0.03 255);
       --color-danger: oklch(50% 0.18 25);
-      --color-danger-bg: oklch(95% 0.02 20);
+      --color-success: oklch(55% 0.15 155);
     }
   }
 

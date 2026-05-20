@@ -9,7 +9,7 @@
   {{ $recentTags = $latest.Params.tags }}
 {{ end }}
 
-{{/* ---------- Intro block ---------- */}}
+{{/* Intro block */}}
 <section class="intro-block">
   <div class="intro-body">
     <p class="intro-greeting">AI 学习笔记</p>
@@ -19,18 +19,16 @@
   </div>
   <div class="intro-meta">
     <span><strong>{{ $postCount }}</strong> 篇文章</span>
-    {{ if $lastUpdated }}
-    <span>最近更新 <strong>{{ $lastUpdated }}</strong></span>
-    {{ end }}
+    {{ if $lastUpdated }}<span>最近更新 <strong>{{ $lastUpdated }}</strong></span>{{ end }}
     {{ if $recentTags }}
     <span class="intro-focus">
-      最近关注 {{ range $recentTags }}<a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-tag">{{ . }}</a>{{ end }}
+      最近关注 {{ range $recentTags }}<a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="chip chip--tag">{{ . }}</a>{{ end }}
     </span>
     {{ end }}
   </div>
 </section>
 
-{{/* ---------- Content index ---------- */}}
+{{/* Content index */}}
 {{ $categories := .Site.Taxonomies.categories }}
 {{ $tags := .Site.Taxonomies.tags }}
 {{ if or $categories $tags }}
@@ -40,7 +38,7 @@
     <span class="index-label">分类</span>
     <div class="index-pills">
       {{ range $name, $_ := $categories }}
-      <a href="{{ "categories/" | relURL }}{{ $name | urlize }}" class="pill pill-category">{{ $name }}</a>
+      <a href="{{ "categories/" | relURL }}{{ $name | urlize }}" class="chip chip--category">{{ $name }}</a>
       {{ end }}
     </div>
   </div>
@@ -50,7 +48,7 @@
     <span class="index-label">标签</span>
     <div class="index-pills">
       {{ range $name, $_ := $tags }}
-      <a href="{{ "tags/" | relURL }}{{ $name | urlize }}" class="pill pill-tag">{{ $name }}</a>
+      <a href="{{ "tags/" | relURL }}{{ $name | urlize }}" class="chip chip--tag">{{ $name }}</a>
       {{ end }}
     </div>
   </div>
@@ -58,12 +56,10 @@
 </section>
 {{ end }}
 
-{{/* ---------- Series area ---------- */}}
+{{/* Series area */}}
 {{ $uniqueSeries := slice }}
 {{ range $posts }}
-  {{ with .Params.series }}
-    {{ $uniqueSeries = $uniqueSeries | append . }}
-  {{ end }}
+  {{ with .Params.series }}{{ $uniqueSeries = $uniqueSeries | append . }}{{ end }}
 {{ end }}
 {{ $uniqueSeries = uniq $uniqueSeries }}
 {{ if gt (len $uniqueSeries) 0 }}
@@ -72,27 +68,26 @@
     <span class="index-label">学习路径</span>
     <div class="index-pills">
       {{ range $uniqueSeries }}
-      <a href="{{ "series/" | relURL }}{{ . | urlize }}" class="pill pill-series">{{ . }}</a>
+      <a href="{{ "series/" | relURL }}{{ . | urlize }}" class="chip chip--series">{{ . }}</a>
       {{ end }}
     </div>
   </div>
 </section>
 {{ end }}
 
-{{/* ---------- Post list ---------- */}}
+{{/* Post list */}}
 {{ if gt $postCount 0 }}
 <section class="post-section">
   <h2 class="section-heading">全部文章</h2>
   <ul class="post-list">
-    {{ range $posts }}
+    {{ range $i, $p := $posts }}
     <li class="post-item">
       <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
       <h3 class="post-title">
         <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ if eq $i 0 }}<span class="draft-badge" style="display:none"><!-- spacer --></span>{{ end }}
       </h3>
-      {{ with .Description }}
-      <p class="post-excerpt">{{ . }}</p>
-      {{ end }}
+      {{ with .Description }}<p class="post-excerpt">{{ . }}</p>{{ end }}
       <div class="post-meta-row">
         {{ $charCount := countrunes .Content }}
         {{ $readMin := div $charCount 450 }}
@@ -101,13 +96,15 @@
         {{ if .Params.categories }}
         <span class="post-meta-sep">&middot;</span>
         {{ range .Params.categories }}
-        <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
+        <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link--category">{{ . }}</a>
         {{ end }}
         {{ end }}
-        {{ if .Params.tags }}
-        {{ range .Params.tags }}
-        <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-tag">{{ . }}</a>
+        {{ $tagCount := len .Params.tags }}
+        {{ if gt $tagCount 0 }}
+        {{ range first 3 .Params.tags }}
+        <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="meta-link meta-link--tag">{{ . }}</a>
         {{ end }}
+        {{ if gt $tagCount 3 }}<span class="post-reading-time">+{{ sub $tagCount 3 }}</span>{{ end }}
         {{ end }}
       </div>
     </li>

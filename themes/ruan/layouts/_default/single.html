@@ -16,16 +16,15 @@
       <span>{{ .Date.Format "2006-01-02" }}</span>
       <span>&middot; 约 {{ $readMin }} 分钟</span>
       {{ range .Params.categories }}
-      <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
+      <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link--category">{{ . }}</a>
       {{ end }}
       {{ if .Draft }}<span class="draft-badge">草稿</span>{{ end }}
     </div>
   </header>
 
-  {{/* ---------- Series module ---------- */}}
+  {{/* Series module */}}
   {{ with .Params.series }}
   {{ $seriesName := . }}
-  {{ $seriesOrder := $.Params.series_order | default 0 }}
   <nav class="series-module" aria-label="学习路径">
     <p class="series-label">学习路径：<a href="{{ "series/" | relURL }}{{ $seriesName | urlize }}">{{ $seriesName }}</a></p>
     <ol class="series-list">
@@ -43,13 +42,11 @@
   </nav>
   {{ end }}
 
-  {{/* ---------- TOC ---------- */}}
+  {{/* TOC */}}
   {{ if and .TableOfContents (in .TableOfContents "<li>") }}
   <details class="toc" open>
     <summary class="toc-title">目录</summary>
-    <div class="toc-content">
-      {{ .TableOfContents }}
-    </div>
+    <div class="toc-content">{{ .TableOfContents }}</div>
   </details>
   {{ end }}
 
@@ -57,20 +54,20 @@
     {{ .Content }}
   </div>
 
-  {{/* ---------- Tags ---------- */}}
+  {{/* Tags */}}
   {{ if .Params.tags }}
   <div class="article-footer-meta">
     <span class="footer-meta-label">标签</span>
     <div class="footer-meta-pills">
       {{ range .Params.tags }}
-      <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="pill pill-tag">{{ . }}</a>
+      <a href="{{ "tags/" | relURL }}{{ . | urlize }}" class="chip chip--tag">{{ . }}</a>
       {{ end }}
     </div>
   </div>
   {{ end }}
 </article>
 
-{{/* ---------- Related articles ---------- */}}
+{{/* Related articles */}}
 {{ $related := slice }}
 {{ $currentTags := .Params.tags | default slice }}
 {{ $currentCats := .Params.categories | default slice }}
@@ -100,72 +97,47 @@
 </section>
 {{ end }}
 
-{{/* ---------- Prev / Next ---------- */}}
+{{/* Prev / Next */}}
 <nav class="prev-next">
   {{ with .PrevInSection }}
   <a href="{{ .RelPermalink }}" class="prev-next-link prev-link">
-    <span class="prev-next-label">上一篇</span>
-    <span class="prev-next-title">{{ .Title }}</span>
+    <span class="prev-next-label">上一篇</span><span class="prev-next-title">{{ .Title }}</span>
   </a>
   {{ end }}
   {{ with .NextInSection }}
   <a href="{{ .RelPermalink }}" class="prev-next-link next-link">
-    <span class="prev-next-label">下一篇</span>
-    <span class="prev-next-title">{{ .Title }}</span>
+    <span class="prev-next-label">下一篇</span><span class="prev-next-title">{{ .Title }}</span>
   </a>
   {{ end }}
 </nav>
 
 <script>
 (function(){
-  /* Reading progress bar */
-  var bar = document.getElementById('readingProgressBar');
-  if (bar) {
-    window.addEventListener('scroll', function() {
-      var scrollTop = window.scrollY || document.documentElement.scrollTop;
-      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      var pct = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
-      bar.style.width = pct + '%';
-    }, {passive: true});
-  }
+  var bar=document.getElementById('readingProgressBar');
+  if(bar){window.addEventListener('scroll',function(){
+    var t=window.scrollY||document.documentElement.scrollTop;
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=h>0?Math.min(t/h*100,100)+'%':'0%';
+  },{passive:true})}
 
-  /* Heading anchors */
-  var headings = document.querySelectorAll('.article-content h2[id], .article-content h3[id]');
-  headings.forEach(function(h) {
-    h.style.position = 'relative';
-    h.style.cursor = 'pointer';
-    var a = document.createElement('a');
-    a.href = '#' + h.id;
-    a.className = 'heading-anchor';
-    a.setAttribute('aria-label', '复制链接');
-    a.textContent = '#';
+  document.querySelectorAll('.article-content h2[id],.article-content h3[id]').forEach(function(h){
+    h.style.position='relative';h.style.cursor='pointer';
+    var a=document.createElement('a');a.href='#'+h.id;
+    a.className='heading-anchor';a.setAttribute('aria-label','复制链接');a.textContent='#';
     h.appendChild(a);
   });
 
-  /* Code copy buttons */
-  var pres = document.querySelectorAll('.article-content pre');
-  pres.forEach(function(pre) {
-    var wrapper = document.createElement('div');
-    wrapper.className = 'code-block-wrapper';
-    pre.parentNode.insertBefore(wrapper, pre);
-    wrapper.appendChild(pre);
-
-    var btn = document.createElement('button');
-    btn.className = 'code-copy-btn';
-    btn.textContent = '复制';
-    btn.setAttribute('aria-label', '复制代码');
-    btn.addEventListener('click', function() {
-      var code = pre.querySelector('code');
-      var text = code ? code.textContent : pre.textContent;
-      navigator.clipboard.writeText(text).then(function() {
-        btn.textContent = '已复制';
-        setTimeout(function(){ btn.textContent = '复制'; }, 1500);
-      }).catch(function() {
-        btn.textContent = '复制失败';
-        setTimeout(function(){ btn.textContent = '复制'; }, 1500);
-      });
+  document.querySelectorAll('.article-content pre').forEach(function(pre){
+    var w=document.createElement('div');w.className='code-block-wrapper';
+    pre.parentNode.insertBefore(w,pre);w.appendChild(pre);
+    var b=document.createElement('button');b.className='code-copy-btn';b.textContent='复制';
+    b.setAttribute('aria-label','复制代码');
+    b.addEventListener('click',function(){
+      var c=pre.querySelector('code'),t=c?c.textContent:pre.textContent;
+      navigator.clipboard.writeText(t).then(function(){b.textContent='已复制';setTimeout(function(){b.textContent='复制'},1500)})
+        .catch(function(){b.textContent='失败';setTimeout(function(){b.textContent='复制'},1500)})
     });
-    wrapper.appendChild(btn);
+    w.appendChild(b);
   });
 })();
 </script>

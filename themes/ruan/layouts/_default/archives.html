@@ -14,12 +14,11 @@
 {{ range $byYear }}
 <section class="archive-year">
   <h2 class="archive-year-heading">{{ .Key }}</h2>
-  {{ $byMonth := .Pages.GroupByDate "01" }}
-  {{ range $byMonth }}
+  {{ range .Pages.GroupByDate "01" }}
   <div class="archive-month-group">
     <h3 class="archive-month-heading">
-      {{ $monthNum := int .Key }}
-      {{ index (slice "" "一月" "二月" "三月" "四月" "五月" "六月" "七月" "八月" "九月" "十月" "十一月" "十二月") $monthNum }}
+      {{ $m := int .Key }}
+      {{ index (slice "" "一月" "二月" "三月" "四月" "五月" "六月" "七月" "八月" "九月" "十月" "十一月" "十二月") $m }}
     </h3>
     <ul class="archive-post-list">
       {{ range .Pages }}
@@ -29,7 +28,7 @@
         {{ if .Params.categories }}
         <span class="archive-post-meta">
           {{ range .Params.categories }}
-          <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link-category">{{ . }}</a>
+          <a href="{{ "categories/" | relURL }}{{ . | urlize }}" class="meta-link meta-link--category">{{ . }}</a>
           {{ end }}
         </span>
         {{ end }}

@@ -17,13 +17,14 @@
   var input = document.getElementById('searchInput');
   var results = document.getElementById('searchResults');
   var index = null;
+  var CAT_URL = {{ "categories/" | relURL | jsonify }};
+  var TAG_URL = {{ "tags/" | relURL | jsonify }};
 
-  fetch('{{ "search-index.json" | relURL }}')
+  fetch({{ "search-index.json" | relURL | jsonify }})
     .then(function(r) { return r.json(); })
     .then(function(data) {
       index = data;
-      var val = input.value.trim();
-      if (val) doSearch(val);
+      if (input.value.trim()) doSearch(input.value.trim());
     })
     .catch(function() {
       results.innerHTML = '<p class="search-error">加载搜索索引失败，请刷新重试。</p>';
@@ -32,43 +33,47 @@
   input.addEventListener('input', function() {
     var val = this.value.trim();
     if (!index) return;
-    if (!val) {
-      results.innerHTML = '<p class="search-hint">输入关键词即时搜索，支持标题、摘要、标签、分类。</p>';
-      return;
-    }
+    if (!val) { results.innerHTML = '<p class="search-hint">输入关键词即时搜索，支持标题、摘要、标签、分类。</p>'; return; }
     doSearch(val);
   });
 
   function doSearch(q) {
     var lower = q.toLowerCase();
     var terms = lower.split(/\s+/).filter(Boolean);
-
     var matched = index.filter(function(item) {
-      var haystack = [item.title, item.description, item.summary, item.categories.join(' '), item.tags.join(' ')].join(' ').toLowerCase();
+      var haystack = [item.title, item.description, item.summary,
+        (item.categories||[]).join(' '), (item.tags||[]).join(' ')
+      ].join(' ').toLowerCase();
       return terms.every(function(t) { return haystack.indexOf(t) !== -1; });
     });
 
-    if (!matched.length) {
-      results.innerHTML = '<p class="search-empty">没有找到匹配的文章。</p>';
-      return;
-    }
+    if (!matched.length) { results.innerHTML = '<p class="search-empty">没有找到匹配的文章。</p>'; return; }
 
     var html = '<p class="search-count">找到 ' + matched.length + ' 篇文章</p><ul class="post-list search-results-list">';
     matched.forEach(function(item) {
+      var chips = '';
+      if (item.categories && item.categorySlugs) {
+        for (var i = 0; i < item.categories.length; i++) {
+          chips += '<a href="' + CAT_URL + item.categorySlugs[i] + '/" class="chip chip--category">' + esc(item.categories[i]) + '</a>';
+        }
+      }
+      if (item.tags && item.tagSlugs) {
+        for (var j = 0; j < item.tags.length; j++) {
+          chips += '<a href="' + TAG_URL + item.tagSlugs[j] + '/" class="chip chip--tag">' + esc(item.tags[j]) + '</a>';
+        }
+      }
       html += '<li class="post-item">' +
         '<span class="post-date">' + item.date + '</span>' +
-        '<h3 class="post-title"><a href="' + item.url + '">' + escapeHtml(item.title) + '</a></h3>' +
-        (item.description ? '<p class="post-excerpt">' + escapeHtml(item.description) + '</p>' : '') +
-        '<div class="post-meta-row">' +
-        (item.categories.length ? item.categories.map(function(c) { return '<a href="{{ "categories/" | relURL }}' + c.toLowerCase() + '" class="meta-link meta-link-category">' + escapeHtml(c) + '</a>'; }).join('') : '') +
-        (item.tags.length ? item.tags.map(function(t) { return '<a href="{{ "tags/" | relURL }}' + t.toLowerCase() + '" class="meta-link meta-link-tag">' + escapeHtml(t) + '</a>'; }).join('') : '') +
-        '</div></li>';
+        '<h3 class="post-title"><a href="' + item.url + '">' + esc(item.title) + '</a></h3>' +
+        (item.description ? '<p class="post-excerpt">' + esc(item.description) + '</p>' : '') +
+        (chips ? '<div class="post-meta-row">' + chips + '</div>' : '') +
+        '</li>';
     });
     html += '</ul>';
     results.innerHTML = html;
   }
 
-  function escapeHtml(s) {
+  function esc(s) {
     var d = document.createElement('div');
     d.textContent = s;
     return d.innerHTML;

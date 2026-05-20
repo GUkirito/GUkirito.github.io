@@ -8,7 +8,9 @@
     "slug": "{{ $p.Slug }}",
     "url": "{{ $p.RelPermalink }}",
     "description": {{ $p.Description | jsonify }},
+    "categorySlugs": [{{ range $j, $c := $p.Params.categories }}{{ if $j }}, {{ end }}"{{ $c | urlize }}"{{ end }}],
     "categories": [{{ range $j, $c := $p.Params.categories }}{{ if $j }}, {{ end }}"{{ $c }}"{{ end }}],
+    "tagSlugs": [{{ range $j, $t := $p.Params.tags }}{{ if $j }}, {{ end }}"{{ $t | urlize }}"{{ end }}],
     "tags": [{{ range $j, $t := $p.Params.tags }}{{ if $j }}, {{ end }}"{{ $t }}"{{ end }}],
     "summary": {{ $p.Summary | truncate 200 | plainify | jsonify }}
   }{{ end }}

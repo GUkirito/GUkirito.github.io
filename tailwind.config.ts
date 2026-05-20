@@ -6,22 +6,22 @@ const config: Config = {
     extend: {
       colors: {
         accent: {
-          DEFAULT: "oklch(65% 0.12 210)",
-          hover: "oklch(72% 0.12 210)",
-          muted: "oklch(25% 0.03 210)",
+          DEFAULT: "oklch(65% 0.14 255)",
+          hover: "oklch(72% 0.13 255)",
+          muted: "oklch(25% 0.06 255)",
         },
         surface: {
-          bg: "oklch(17% 0.005 210)",
-          card: "oklch(22% 0.006 210)",
-          elevated: "oklch(24% 0.006 210)",
-          border: "oklch(28% 0.005 210)",
-          light: "oklch(23% 0.005 210)",
+          bg: "oklch(18% 0.003 250)",
+          card: "oklch(24% 0.004 250)",
+          elevated: "oklch(26% 0.005 250)",
+          border: "oklch(30% 0.005 250)",
+          light: "oklch(20% 0.003 250)",
         },
         ink: {
-          heading: "oklch(92% 0.002 210)",
-          body: "oklch(82% 0.003 210)",
-          muted: "oklch(65% 0.005 210)",
-          faint: "oklch(50% 0.005 210)",
+          heading: "oklch(92% 0.002 250)",
+          body: "oklch(82% 0.003 250)",
+          muted: "oklch(50% 0.004 250)",
+          faint: "oklch(40% 0.004 250)",
         },
       },
       fontFamily: {
