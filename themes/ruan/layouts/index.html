@@ -85,7 +85,6 @@
       <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
       <h3 class="post-title">
         <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        {{ if eq $i 0 }}<span class="draft-badge" style="display:none"><!-- spacer --></span>{{ end }}
       </h3>
       {{ with .Description }}<p class="post-excerpt">{{ . }}</p>{{ end }}
       <div class="post-meta-row">
