@@ -143,11 +143,11 @@ summary:focus-visible,select:focus-visible,.chip:focus-visible{
   .intro-block{background:var(--surface-elevated)}
 }
 @media(min-width:560px){
-  .intro-block{grid-template-columns:1fr auto;align-items:end}
+  .intro-block{grid-template-columns:1fr auto;align-items:start}
 }
 .intro-greeting{font-size:1.05rem;font-weight:700;color:var(--color-text-heading);letter-spacing:-0.01em;margin-bottom:var(--space-xs)}
 .intro-desc{font-size:0.88rem;color:var(--color-text-secondary);line-height:1.65;max-width:52ch}
-.intro-meta{display:flex;flex-wrap:wrap;gap:var(--space-sm) var(--space-lg);font-size:0.76rem;color:var(--color-text-muted);white-space:nowrap}
+.intro-meta{display:flex;flex-direction:column;gap:var(--space-xs);font-size:0.76rem;color:var(--color-text-muted)}
 .intro-meta strong{color:var(--color-text);font-weight:600}
 .intro-focus{font-size:0.76rem;color:var(--color-text-muted)}
 .intro-focus a{margin-left:3px;font-weight:500}
