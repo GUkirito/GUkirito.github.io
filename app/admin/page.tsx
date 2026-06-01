@@ -43,7 +43,7 @@ export default function AdminDashboard() {
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center h-64 text-ink-muted">
-        加载中...
+        加载�?..
       </div>
     );
   }
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
           文章管理
         </h2>
         <span className="text-sm text-ink-muted">
-          共 {posts.length} 篇
+          �?{posts.length} �?
         </span>
       </div>
 

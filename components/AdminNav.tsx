@@ -15,8 +15,7 @@ export default function AdminNav() {
     }`;
 
   return (
-    <aside className="w-56 bg-surface-card/80 border-r border-white/8 flex flex-col shrink-0
-                      backdrop-blur-md glass-sidebar">
+    <aside className="w-56 bg-surface-card border-r border-surface-border flex flex-col shrink-0">
       <div className="px-4 py-4 border-b border-surface-light">
         <Link
           href="/admin"
@@ -55,8 +54,7 @@ export default function AdminNav() {
           className="w-full text-left px-3 py-2 rounded-md text-sm text-ink-faint
                      hover:bg-surface-light hover:text-ink-muted transition-colors duration-150"
         >
-          退出登录
-        </button>
+          退出登�?        </button>
       </div>
     </aside>
   );

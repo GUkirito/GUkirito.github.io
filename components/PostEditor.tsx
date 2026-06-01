@@ -153,7 +153,7 @@ export default function PostEditor({
     "transition-colors duration-150";
 
   if (!loaded) {
-    return <div className="text-ink-muted py-8 text-center text-sm">加载中...</div>;
+    return <div className="text-ink-muted py-8 text-center text-sm">加载�?..</div>;
   }
 
   return (
@@ -178,14 +178,14 @@ export default function PostEditor({
         <label className="block text-sm font-medium text-ink-body mb-1">
           摘要
           <span className="text-ink-faint font-normal ml-1">
-            {descLen > 0 && `（${descLen} 字${descLen > 160 ? "，建议 ≤160" : ""}）`}
+            {descLen > 0 && `�?{descLen} �?{descLen > 160 ? "，建�?�?60" : ""}）`}
           </span>
         </label>
         <input
           type="text"
           value={description}
           onChange={(e) => { setDescription(e.target.value); markDirty(); }}
-          placeholder="一句话简介，显示在首页"
+          placeholder="一句话简介，显示在首�?
           className={inputClass}
         />
       </div>
@@ -201,15 +201,14 @@ export default function PostEditor({
             分类
             {categoriesStr.trim() && (
               <span className="text-ink-faint font-normal ml-1">
-                {categoriesStr.split(/[,，]/).filter(Boolean).length} 个
-              </span>
+                {categoriesStr.split(/[,，]/).filter(Boolean).length} �?              </span>
             )}
           </label>
           <input type="text" value={categoriesStr} onChange={(e) => { setCategoriesStr(e.target.value); markDirty(); }} placeholder="AI概念, AI实践" className={inputClass} />
           {categoriesStr.trim() && (
             <div className="flex flex-wrap gap-1 mt-1">
               {categoriesStr.split(/[,，]/).filter(Boolean).map((c) => (
-                <span key={c} className="inline-block px-1.5 py-0.5 text-xs rounded bg-amber-400/10 text-amber-500">{c.trim()}</span>
+                <span key={c} className="inline-block px-1.5 py-0.5 text-xs rounded bg-accent-muted text-accent">{c.trim()}</span>
               ))}
             </div>
           )}
@@ -219,8 +218,7 @@ export default function PostEditor({
             标签
             {tagsStr.trim() && (
               <span className="text-ink-faint font-normal ml-1">
-                {tagsStr.split(/[,，]/).filter(Boolean).length} 个
-              </span>
+                {tagsStr.split(/[,，]/).filter(Boolean).length} �?              </span>
             )}
           </label>
           <input type="text" value={tagsStr} onChange={(e) => { setTagsStr(e.target.value); markDirty(); }} placeholder="LLM, 入门, 工作原理" className={inputClass} />
@@ -255,9 +253,8 @@ export default function PostEditor({
       {/* Body */}
       <div>
         <label className="block text-sm font-medium text-ink-body mb-1">
-          正文（Markdown）
-          <span className="text-ink-faint font-normal ml-1">
-            {wordCount > 0 && ` · ${wordCount} 字 · 约 ${readMin} 分钟`}
+          正文（Markdown�?          <span className="text-ink-faint font-normal ml-1">
+            {wordCount > 0 && ` · ${wordCount} �?· �?${readMin} 分钟`}
           </span>
         </label>
         <MDEditor
@@ -277,7 +274,7 @@ export default function PostEditor({
                      hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed
                      transition-colors duration-150"
         >
-          {saving ? "保存中..." : submitLabel}
+          {saving ? "保存�?.." : submitLabel}
         </button>
 
         {editSlug && (
@@ -306,7 +303,7 @@ export default function PostEditor({
           <button
             type="button"
             onClick={() => {
-              if (window.confirm("确定删除这篇文章？此操作不可撤销。")) {
+              if (window.confirm("确定删除这篇文章？此操作不可撤销�?)) {
                 onDelete();
               }
             }}

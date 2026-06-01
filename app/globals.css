@@ -9,14 +9,14 @@
     --color-surface-muted: oklch(20% 0.003 250);
     --color-text-heading: oklch(92% 0.002 250);
     --color-text: oklch(82% 0.003 250);
-    --color-text-muted: oklch(50% 0.004 250);
-    --color-text-faint: oklch(40% 0.004 250);
+    --color-text-muted: oklch(62% 0.004 250);
+    --color-text-faint: oklch(52% 0.004 250);
     --color-border: oklch(30% 0.005 250);
     --color-border-light: oklch(23% 0.004 250);
     --color-accent: oklch(65% 0.14 255);
     --color-accent-hover: oklch(72% 0.13 255);
     --color-accent-soft: oklch(25% 0.06 255);
-    --color-danger: oklch(62% 0.18 25);
+    --color-danger: oklch(56% 0.16 25);
     --color-success: oklch(65% 0.13 155);
   }
 
@@ -43,24 +43,9 @@
     background-color: var(--color-bg);
     color: var(--color-text);
   }
-
-  /* Glass sidebar fallback */
-  .glass-sidebar {
-    background: oklch(24% 0.004 250 / 0.80);
-  }
-  @supports not (backdrop-filter: blur(1px)) {
-    .glass-sidebar {
-      background: oklch(24% 0.004 250);
-    }
-  }
-  @media (prefers-color-scheme: light) {
-    .glass-sidebar {
-      background: oklch(99% 0.001 250 / 0.80);
-    }
-    @supports not (backdrop-filter: blur(1px)) {
-      .glass-sidebar {
-        background: oklch(99% 0.001 250);
-      }
-    }
-  }
 }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spinner { width: 20px; height: 20px; border: 2px solid var(--color-border); border-top-color: var(--color-accent); border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block; vertical-align: middle; margin-right: 0.5em; }

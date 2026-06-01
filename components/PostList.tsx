@@ -57,23 +57,23 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
   const hasFilter = search || filterCategory || filterTag;
 
   const selectClass =
-    "px-2 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-xs text-ink-body " +
-    "focus:outline-none focus:ring-2 focus:ring-accent/30 min-h-[36px]";
+    "px-2 py-2 bg-surface-bg border border-surface-border rounded-lg text-xs text-ink-body " +
+    "focus:outline-none focus:ring-2 focus:ring-accent/30 min-h-[44px]";
   const inputClass =
-    "flex-1 min-w-[160px] px-3 py-1.5 bg-surface-bg border border-surface-border rounded-lg text-xs text-ink-body " +
+    "flex-1 min-w-[160px] px-3 py-2 bg-surface-bg border border-surface-border rounded-lg text-xs text-ink-body " +
     "placeholder:text-ink-faint " +
     "focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent " +
-    "transition-colors duration-150 min-h-[36px]";
+    "transition-colors duration-150 min-h-[44px]";
 
   if (loading) {
-    return <div className="text-ink-muted py-12 text-center text-sm">加载中...</div>;
+    return <div className="text-ink-muted py-12 text-center text-sm">加载�?..</div>;
   }
 
   if (posts.length === 0) {
     return (
       <div className="text-ink-muted py-12 text-center text-sm">
         还没有文章，
-        <Link href="/admin/new" className="text-accent hover:underline font-medium">写一篇</Link>
+        <Link href="/admin/new" className="text-accent hover:underline font-medium">写一�?/Link>
       </div>
     );
   }
@@ -98,12 +98,12 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
         </select>
         {hasFilter && (
           <button onClick={clearFilters}
-            className="text-xs text-ink-muted hover:text-accent transition-colors duration-150 min-h-[36px] px-2">
+            className="text-xs text-ink-muted hover:text-accent transition-colors duration-150 min-h-[44px] px-2">
             清除
           </button>
         )}
         <button onClick={() => setViewMode(viewMode === "table" ? "list" : "table")}
-          className="ml-auto text-xs text-ink-muted hover:text-accent transition-colors duration-150 min-h-[36px] px-2 sm:hidden"
+          className="ml-auto text-xs text-ink-muted hover:text-accent transition-colors duration-150 min-h-[44px] px-2 sm:hidden"
           title={viewMode === "table" ? "切换列表视图" : "切换表格视图"}>
           {viewMode === "table" ? "列表" : "表格"}
         </button>
@@ -112,7 +112,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
       {/* Count */}
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs text-ink-muted">
-          共 {posts.length} 篇{hasFilter && <span>，筛选出 {filtered.length} 篇</span>}
+          �?{posts.length} 篇{hasFilter && <span>，筛选出 {filtered.length} �?/span>}
         </span>
       </div>
 
@@ -130,7 +130,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
           <tbody>
             {filtered.length === 0 ? (
               <tr><td colSpan={4} className="py-12 text-center text-ink-muted text-sm">
-                {hasFilter ? "没有匹配的文章" : "还没有文章"}
+                {hasFilter ? "没有匹配的文�? : "还没有文�?}
               </td></tr>
             ) : (
               filtered.map((post) => (
@@ -155,7 +155,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
                   <td className="py-3 text-right whitespace-nowrap">
                     <Link href={`/admin/edit/${post.slug}`}
                       className="text-accent hover:text-accent-hover mr-3 transition-colors duration-150 text-xs font-medium">编辑</Link>
-                    <button onClick={() => { if (window.confirm(`确定删除「${post.title}」？此操作不可撤销。`)) onDelete(post.slug); }}
+                    <button onClick={() => { if (window.confirm(`确定删除�?{post.title}」？此操作不可撤销。`)) onDelete(post.slug); }}
                       className="text-red-400 hover:text-red-300 transition-colors duration-150 text-xs">删除</button>
                   </td>
                 </tr>
@@ -169,7 +169,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
       <div className={`${viewMode === "table" ? "hidden" : "block"} sm:hidden`}>
         {filtered.length === 0 ? (
           <div className="py-12 text-center text-ink-muted text-sm">
-            {hasFilter ? "没有匹配的文章" : "还没有文章"}
+            {hasFilter ? "没有匹配的文�? : "还没有文�?}
           </div>
         ) : (
           <div className="divide-y divide-surface-border">
@@ -196,7 +196,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
                   <div className="flex items-center gap-2 shrink-0">
                     <Link href={`/admin/edit/${post.slug}`}
                       className="text-accent hover:text-accent-hover transition-colors duration-150 text-xs font-medium">编辑</Link>
-                    <button onClick={() => { if (window.confirm(`确定删除「${post.title}」？此操作不可撤销。`)) onDelete(post.slug); }}
+                    <button onClick={() => { if (window.confirm(`确定删除�?{post.title}」？此操作不可撤销。`)) onDelete(post.slug); }}
                       className="text-red-400 hover:text-red-300 transition-colors duration-150 text-xs">删除</button>
                   </div>
                 </div>

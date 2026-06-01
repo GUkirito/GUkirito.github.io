@@ -20,8 +20,8 @@ const config: Config = {
         ink: {
           heading: "oklch(92% 0.002 250)",
           body: "oklch(82% 0.003 250)",
-          muted: "oklch(50% 0.004 250)",
-          faint: "oklch(40% 0.004 250)",
+          muted: "oklch(62% 0.004 250)",
+          faint: "oklch(52% 0.004 250)",
         },
       },
       fontFamily: {
