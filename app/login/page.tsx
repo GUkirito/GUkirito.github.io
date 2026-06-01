@@ -28,7 +28,7 @@ function LoginContent() {
 
         {error === "unauthorized" && rejectedUser && (
           <div className="bg-red-400/10 text-red-400 border border-red-400/20 rounded-lg p-3 mb-4 text-sm">
-            <p className="font-medium mb-1">登录被拒�?/p>
+            <p className="font-medium mb-1">登录被拒绝</p>
             <p>
               GitHub 账号{" "}
               <code className="bg-surface-light px-1.5 py-0.5 rounded text-ink-body text-xs">
@@ -38,7 +38,7 @@ function LoginContent() {
               <code className="bg-surface-light px-1.5 py-0.5 rounded text-ink-body text-xs">
                 gukirito
               </code>{" "}
-              登录�?
+              登录。
             </p>
           </div>
         )}
@@ -50,7 +50,7 @@ function LoginContent() {
         )}
 
         {status === "loading" ? (
-          <div className="text-ink-muted py-4 text-sm">检查登录状�?..</div>
+          <div className="text-ink-muted py-4 text-sm">检查登录状态...</div>
         ) : (
           <button
             onClick={() => signIn("github", { callbackUrl: "/admin" })}
@@ -73,7 +73,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="flex items-center justify-center min-h-screen text-ink-muted text-sm">
-          加载�?..
+          加载中...
         </div>
       }
     >

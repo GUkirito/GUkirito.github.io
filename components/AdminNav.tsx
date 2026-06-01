@@ -54,7 +54,8 @@ export default function AdminNav() {
           className="w-full text-left px-3 py-2 rounded-md text-sm text-ink-faint
                      hover:bg-surface-light hover:text-ink-muted transition-colors duration-150"
         >
-          退出登�?        </button>
+          退出登录
+        </button>
       </div>
     </aside>
   );

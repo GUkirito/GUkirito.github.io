@@ -3,8 +3,8 @@ import SessionProvider from "@/components/SessionProvider";
 
 export const metadata = {
   title: {
-    template: "%s - AI ѧϰ�ʼ�",
-    default: "AI ѧϰ�ʼ�",
+    template: "%s - AI 学习笔记",
+    default: "AI 学习笔记",
   },
   icons: {
     icon: "/favicon.svg",

@@ -66,14 +66,14 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
     "transition-colors duration-150 min-h-[44px]";
 
   if (loading) {
-    return <div className="text-ink-muted py-12 text-center text-sm">加载�?..</div>;
+    return <div className="text-ink-muted py-12 text-center text-sm">加载中...</div>;
   }
 
   if (posts.length === 0) {
     return (
       <div className="text-ink-muted py-12 text-center text-sm">
         还没有文章，
-        <Link href="/admin/new" className="text-accent hover:underline font-medium">写一�?/Link>
+        <Link href="/admin/new" className="text-accent hover:underline font-medium">写一篇</Link>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
       {/* Count */}
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs text-ink-muted">
-          �?{posts.length} 篇{hasFilter && <span>，筛选出 {filtered.length} �?/span>}
+          共 {posts.length} 篇{hasFilter && <span>，筛选出 {filtered.length} 篇</span>}
         </span>
       </div>
 
@@ -130,7 +130,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
           <tbody>
             {filtered.length === 0 ? (
               <tr><td colSpan={4} className="py-12 text-center text-ink-muted text-sm">
-                {hasFilter ? "没有匹配的文�? : "还没有文�?}
+                {hasFilter ? "没有匹配的文章" : "还没有文章"}
               </td></tr>
             ) : (
               filtered.map((post) => (
@@ -155,7 +155,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
                   <td className="py-3 text-right whitespace-nowrap">
                     <Link href={`/admin/edit/${post.slug}`}
                       className="text-accent hover:text-accent-hover mr-3 transition-colors duration-150 text-xs font-medium">编辑</Link>
-                    <button onClick={() => { if (window.confirm(`确定删除�?{post.title}」？此操作不可撤销。`)) onDelete(post.slug); }}
+                    <button onClick={() => { if (window.confirm(`确定删除「${post.title}」？此操作不可撤销。`)) onDelete(post.slug); }}
                       className="text-red-400 hover:text-red-300 transition-colors duration-150 text-xs">删除</button>
                   </td>
                 </tr>
@@ -169,7 +169,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
       <div className={`${viewMode === "table" ? "hidden" : "block"} sm:hidden`}>
         {filtered.length === 0 ? (
           <div className="py-12 text-center text-ink-muted text-sm">
-            {hasFilter ? "没有匹配的文�? : "还没有文�?}
+            {hasFilter ? "没有匹配的文章" : "还没有文章"}
           </div>
         ) : (
           <div className="divide-y divide-surface-border">
@@ -196,7 +196,7 @@ export default function PostList({ posts, loading, onDelete }: PostListProps) {
                   <div className="flex items-center gap-2 shrink-0">
                     <Link href={`/admin/edit/${post.slug}`}
                       className="text-accent hover:text-accent-hover transition-colors duration-150 text-xs font-medium">编辑</Link>
-                    <button onClick={() => { if (window.confirm(`确定删除�?{post.title}」？此操作不可撤销。`)) onDelete(post.slug); }}
+                    <button onClick={() => { if (window.confirm(`确定删除「${post.title}」？此操作不可撤销。`)) onDelete(post.slug); }}
                       className="text-red-400 hover:text-red-300 transition-colors duration-150 text-xs">删除</button>
                   </div>
                 </div>
